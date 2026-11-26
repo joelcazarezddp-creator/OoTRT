@@ -1,0 +1,986 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="apple-mobile-web-app-title" content="OoT 100%">
+<meta name="theme-color" content="#0d1a12">
+<title>Ocarina of Time (Switch 2): 100% Tracker</title>
+<link rel="manifest" href='data:application/manifest+json,{"name":"Ocarina of Time (Switch 2) 100%25 Tracker","short_name":"OoT 100%25","display":"standalone","background_color":"%230d1a12","theme_color":"%230d1a12","start_url":"."}'>
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='12' fill='%230d1a12'/%3E%3Cpath d='M32 8 56 52H8z' fill='%23d4a72c'/%3E%3Cpath d='M32 30 44 52H20z' fill='%230d1a12'/%3E%3C/svg%3E">
+<style>
+:root{--bg:#0d1a12;--bg2:#13241a;--bg3:#1a3024;--line:#27432f;--fg:#e8efe9;--muted:#9fb3a5;--gold:#d4a72c;--gold2:#f0c75a;--ok:#5fcf80;--danger:#e0506a;--radius:12px}
+*{box-sizing:border-box}
+html,body{margin:0;background:var(--bg);color:var(--fg);font:15px/1.4 -apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;-webkit-text-size-adjust:100%}
+button,select,input{font:inherit;color:inherit}
+button{cursor:pointer}
+a{color:var(--gold2)}
+header.top{position:sticky;top:0;z-index:20;background:linear-gradient(180deg,var(--bg) 0%,rgba(13,26,18,.96) 100%);border-bottom:1px solid var(--line);padding:calc(env(safe-area-inset-top) + 10px) 14px 10px}
+.titlebar{display:flex;align-items:center;gap:12px;flex-wrap:wrap}
+.titlebar h1{font-size:19px;margin:0;letter-spacing:.3px;color:var(--gold2);white-space:nowrap}
+.titlebar h1 span{color:var(--fg);font-weight:500}
+.progress{flex:1;min-width:180px;display:flex;align-items:center;gap:10px}
+.bar{flex:1;height:12px;background:var(--bg3);border-radius:999px;overflow:hidden;border:1px solid var(--line)}
+.bar > i{display:block;height:100%;background:linear-gradient(90deg,#b8891c,var(--gold2));width:0;transition:width .3s}
+.pct{font-weight:700;color:var(--gold2);min-width:60px;text-align:right;font-variant-numeric:tabular-nums}
+.sub{color:var(--muted);font-size:12.5px}
+.actions{display:flex;gap:6px;flex-wrap:wrap}
+.btn{background:var(--bg3);border:1px solid var(--line);border-radius:9px;padding:7px 11px;font-size:13.5px;color:var(--fg)}
+.btn:hover{border-color:var(--gold)}
+.btn.primary{background:var(--gold);color:#1b1500;border-color:var(--gold);font-weight:600}
+.btn.danger{color:#ffb3c0;border-color:#5a2a33}
+.btn.small{padding:4px 8px;font-size:12.5px}
+.summary{display:grid;grid-template-columns:repeat(auto-fill,minmax(128px,1fr));gap:6px;padding:10px 14px 0}
+.sumcard{background:var(--bg2);border:1px solid var(--line);border-radius:10px;padding:7px 9px;cursor:pointer;text-align:left;position:relative;overflow:hidden}
+.sumcard.active{border-color:var(--gold);box-shadow:0 0 0 1px var(--gold) inset}
+.sumcard .lbl{font-size:12px;color:var(--muted);display:flex;align-items:center;gap:6px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.sumcard .dot{width:8px;height:8px;border-radius:50%;flex:none}
+.sumcard .num{font-size:15px;font-weight:700;margin-top:2px;font-variant-numeric:tabular-nums}
+.sumcard .num small{color:var(--muted);font-weight:500}
+.sumcard .mini{position:absolute;left:0;bottom:0;height:3px;background:var(--c,var(--gold));opacity:.8}
+.sumcard.done .num{color:var(--ok)}
+.controls{padding:10px 14px;display:flex;flex-direction:column;gap:8px}
+.row{display:flex;gap:8px;flex-wrap:wrap;align-items:center}
+.row label{font-size:12px;color:var(--muted);text-transform:uppercase;letter-spacing:.6px}
+.field{display:flex;flex-direction:column;gap:3px;min-width:140px;flex:1}
+.field select,.field input[type=search]{background:var(--bg2);border:1px solid var(--line);border-radius:9px;padding:8px 10px;width:100%}
+.seg{display:inline-flex;background:var(--bg2);border:1px solid var(--line);border-radius:9px;overflow:hidden}
+.seg button{background:transparent;border:0;padding:7px 11px;font-size:13px;color:var(--muted);border-right:1px solid var(--line)}
+.seg button:last-child{border-right:0}
+.seg button.on{background:var(--bg3);color:var(--gold2);font-weight:600}
+.chk{display:inline-flex;align-items:center;gap:6px;font-size:13px;color:var(--muted);cursor:pointer;user-select:none}
+.chk input{accent-color:var(--gold)}
+#togglectl{display:none}
+main{padding:0 14px calc(env(safe-area-inset-bottom) + 40px);max-width:1100px;margin:0 auto}
+.group{margin:14px 0 6px}
+.ghead{display:flex;align-items:center;gap:10px;padding:8px 10px;background:var(--bg2);border:1px solid var(--line);border-radius:10px;cursor:pointer;position:sticky;top:var(--stick,120px);z-index:5}
+.ghead h2{font-size:15px;margin:0;flex:1}
+.ghead .gcount{font-size:12.5px;color:var(--muted);font-variant-numeric:tabular-nums}
+.ghead .gbar{width:90px;height:6px;background:var(--bg3);border-radius:999px;overflow:hidden}
+.ghead .gbar i{display:block;height:100%;background:var(--gold)}
+.ghead .caret{color:var(--muted);transition:transform .15s}
+.group.collapsed .caret{transform:rotate(-90deg)}
+.group.collapsed .items{display:none}
+.items{display:flex;flex-direction:column;gap:4px;margin-top:6px}
+.item{display:grid;grid-template-columns:28px 1fr;gap:4px 10px;padding:9px 10px;background:var(--bg2);border:1px solid var(--line);border-radius:10px;align-items:start}
+.item:hover{border-color:#3a5e45}
+.item.done{opacity:.55}
+.item.done .name{text-decoration:line-through;text-decoration-color:var(--muted)}
+.item .box{width:22px;height:22px;margin-top:1px;accent-color:var(--gold);cursor:pointer}
+.item .head{display:flex;flex-wrap:wrap;gap:5px 8px;align-items:center}
+.item .name{font-weight:600}
+.tag{font-size:11px;padding:1px 7px;border-radius:999px;border:1px solid var(--line);color:var(--muted);white-space:nowrap}
+.tag.cat{color:#0d1a12;border-color:transparent;font-weight:600}
+.tag.child{color:#9ad8ff;border-color:#2a5473}.tag.adult{color:#ffc07a;border-color:#6b4a24}.tag.either{color:#c9d4cc}
+.tag.night{color:#b9b0ff;border-color:#4a4080}.tag.day{color:#ffe59a;border-color:#6e5b1f}
+.tag.opt{color:#8fd1a5;border-color:#2f6b43}
+.desc{grid-column:2;color:var(--muted);font-size:13.5px}
+.req{grid-column:2;font-size:12.5px;color:#c8b27a}
+.req b{color:var(--muted);font-weight:500}
+body.compact .desc,body.compact .req{display:none}
+.empty{padding:40px 10px;text-align:center;color:var(--muted)}
+footer{padding:20px 14px 40px;color:var(--muted);font-size:12.5px;text-align:center;line-height:1.6}
+dialog{background:var(--bg2);color:var(--fg);border:1px solid var(--line);border-radius:14px;padding:18px;max-width:520px;width:calc(100% - 32px)}
+dialog::backdrop{background:rgba(0,0,0,.6)}
+dialog h3{margin:0 0 8px;color:var(--gold2)}
+dialog p{color:var(--muted);font-size:13.5px;margin:6px 0}
+dialog textarea{width:100%;min-height:72px;background:var(--bg);border:1px solid var(--line);border-radius:9px;padding:8px;color:var(--fg);font:12.5px ui-monospace,Menlo,Consolas,monospace;word-break:break-all}
+.dlgrow{display:flex;gap:8px;flex-wrap:wrap;margin-top:8px}
+.toast{position:fixed;left:50%;bottom:calc(env(safe-area-inset-bottom) + 18px);transform:translateX(-50%);background:var(--gold);color:#1b1500;font-weight:600;padding:9px 14px;border-radius:999px;opacity:0;transition:opacity .2s;pointer-events:none;z-index:50}
+.toast.show{opacity:1}
+.banner{margin:10px 14px 0;padding:10px 12px;background:#2a2410;border:1px solid #6b5a1f;border-radius:10px;font-size:13px;color:#f1e4b8;display:flex;gap:10px;align-items:flex-start}
+.banner b{color:var(--gold2)}
+.banner .x{margin-left:auto;background:transparent;border:0;color:#c9b77a;font-size:18px;line-height:1;padding:0 4px}
+body.nobanner .banner{display:none}
+.pill{display:inline-flex;align-items:center;gap:4px;font-size:11.5px;padding:1px 8px;border-radius:999px;border:1px solid;white-space:nowrap;cursor:default}
+.pill.need{color:#ffd27a;border-color:#8a6a1c;background:#2a2410;cursor:pointer}
+.pill.have{color:#8fe3a8;border-color:#2f6b43;background:#102a19}
+.pill.alt{color:#7f8f84;border-color:#2e4336;background:transparent}
+.pill.neutral{color:#9fb3a5;border-color:var(--line)}
+.pill .ic{font-size:10px}
+.reqs{grid-column:2;display:flex;flex-wrap:wrap;gap:4px 5px;align-items:center;margin-top:2px}
+.reqs .sep{font-size:11px;color:#6f8276;padding:0 1px}
+.item.locked{border-left:3px solid #8a6a1c}
+.tag.lock{color:#ffd27a;border-color:#8a6a1c;background:#2a2410;font-weight:600}
+.tag.open{color:#8fe3a8;border-color:#2f6b43}
+.ghead .areq{display:flex;gap:4px;flex-wrap:wrap}
+body.compact .reqs{display:none}
+.reqs .note{font-style:italic}
+.item.flash{animation:flash 1.8s ease-out}
+@keyframes flash{0%,55%{box-shadow:0 0 0 2px var(--gold2)}100%{box-shadow:none}}
+@media (max-width:640px){
+  #togglectl{display:inline-flex}
+  body.ctl-hidden .controls{display:none}
+  .seg button{padding:7px 9px;font-size:12.5px}
+  .item{grid-template-columns:26px 1fr;padding:8px}
+  .ghead{top:var(--stick,60px)}
+}
+</style>
+</head>
+<body>
+<header class="top">
+  <div class="titlebar">
+    <h1>Ocarina of Time <span>Switch 2 remake &middot; 100% Tracker</span></h1>
+    <div class="progress"><div class="bar"><i id="pbar"></i></div><div class="pct" id="ppct">0%</div></div>
+    <div class="actions">
+      <button class="btn small" id="togglectl">Filters</button>
+      <button class="btn small" id="btn-sync">Sync / Backup</button>
+      <button class="btn small" id="btn-legend" title="Show requirement legend">? Legend</button>
+      <button class="btn small" id="btn-expand">Collapse all</button>
+      <button class="btn small danger" id="btn-reset">Reset</button>
+    </div>
+  </div>
+  <div class="sub" id="psub"></div>
+</header>
+<div class="banner" id="banner"><span>&#9888;</span><div><b>Requirement notices.</b> Each entry lists what you need to reach or obtain it. <span class="pill need"><span class="ic">&#128274;</span>Hookshot</span> = you have not checked that item off yet, so the entry is <b>Locked</b>; <span class="pill have"><span class="ic">&#10003;</span>Hookshot</span> = you have it. Lock status comes only from what you have marked in this tracker. Tap an amber pill to see where to get that item. "To enter" pills apply to a whole area.</div><button class="x" id="banner-x" aria-label="Dismiss">&times;</button></div>
+<div class="summary" id="summary"></div>
+<section class="controls" id="controls">
+  <div class="row">
+    <div class="field" style="flex:2"><label>Search</label><input type="search" id="q" placeholder="Name, location, requirement..." autocomplete="off"></div>
+    <div class="field"><label>Region</label><select id="region"><option value="">All regions</option></select></div>
+    <div class="field"><label>Area</label><select id="area"><option value="">All areas</option></select></div>
+  </div>
+  <div class="row">
+    <div class="field" style="flex:0 0 auto"><label>Age</label><div class="seg" id="age"><button data-v="">All</button><button data-v="C">Child</button><button data-v="A">Adult</button><button data-v="B">Either</button></div></div>
+    <div class="field" style="flex:0 0 auto"><label>Time</label><div class="seg" id="time"><button data-v="">All</button><button data-v="D">Day</button><button data-v="N">Night</button><button data-v="X">Anytime</button></div></div>
+    <div class="field" style="flex:0 0 auto"><label>Status</label><div class="seg" id="status"><button data-v="">All</button><button data-v="todo">To do</button><button data-v="done">Done</button></div></div>
+    <div class="field" style="flex:0 0 auto"><label>Availability</label><div class="seg" id="avail"><button data-v="">All</button><button data-v="open">Available now</button><button data-v="locked">Locked</button></div></div>
+  </div>
+  <div class="row">
+    <div class="field" style="flex:0 1 200px"><label>Sort</label><select id="sort"><option value="game">Game order</option><option value="area">Area</option><option value="cat">Type</option><option value="name">Name (A-Z)</option><option value="age">Age (child first)</option><option value="todo">To do first</option></select></div>
+    <div class="field" style="flex:0 1 200px"><label>Group by</label><select id="group"><option value="area">Area</option><option value="region">Region</option><option value="cat">Type</option><option value="none">No grouping</option></select></div>
+    <label class="chk"><input type="checkbox" id="opt"> Include optional extras</label>
+    <label class="chk"><input type="checkbox" id="compact"> Compact (hide details)</label>
+    <button class="btn small" id="clear">Clear filters</button>
+  </div>
+</section>
+<main id="list"></main>
+<footer>
+  Progress is saved in this browser automatically. Use <b>Sync / Backup</b> to move it to another device.<br>
+  Counts: 100 Gold Skulltulas, 36 Heart Pieces, 8 Heart Containers, all items, upgrades, songs, bottles, masks, trade sequences, dungeon maps/compasses/boss keys, 10 Big Poes, 10 bean spots.
+</footer>
+<dialog id="dlg"></dialog>
+<div class="toast" id="toast"></div>
+<script>
+// ---- The Legend of Zelda: Ocarina of Time (Nintendo Switch 2 remake, 2026) 100% data ----
+// Areas: [key, label, region]
+const AREAS = [
+ ["kf","Kokiri Forest","Forest"],["dt","Great Deku Tree","Forest"],["lw","Lost Woods","Forest"],["sfm","Sacred Grove","Forest"],["ft","Forest Temple","Forest"],
+ ["hf","Hyrule Field","Field & Ranch"],["llr","Lon Lon Ranch","Field & Ranch"],
+ ["mk","Hyrule Castle Town","Castle Town"],["hc","Hyrule Castle grounds","Castle Town"],["tot","Temple of Time","Castle Town"],
+ ["kak","Kakariko Village","Kakariko"],["gy","Graveyard","Kakariko"],["botw","Bottom of the Well","Kakariko"],["st","Shadow Temple","Kakariko"],
+ ["dmt","Death Mountain Trail","Death Mountain"],["dc","Dodongo Cavern","Death Mountain"],["gc","Goron City","Death Mountain"],["dmc","Death Mountain Crater","Death Mountain"],["fit","Fire Temple","Death Mountain"],
+ ["zr","Zora River","Zora"],["zd","Zora Domain","Zora"],["zf","Zora Fountain","Zora"],["jj","Lord Jabu-Jabu's Belly","Zora"],["ic","Ice Cavern","Zora"],
+ ["lh","Lake Hylia","Lake Hylia"],["wt","Water Temple","Lake Hylia"],
+ ["gv","Gerudo Valley","Gerudo Desert"],["gf","Gerudo Fortress","Gerudo Desert"],["gtg","Gerudo Proving Grounds","Gerudo Desert"],["hw","Mirage Desert","Gerudo Desert"],["col","Evil Desert Colossus","Gerudo Desert"],["spt","Spirit Temple","Gerudo Desert"],
+ ["ogc","Ganondorf's Castle","Ganondorf's Castle"],["hof","Hall of Fallen Foes","Hall of Fallen Foes"]
+];
+// Categories: [key, label, color]
+const CATS = [
+ ["gs","Gold Skulltula","#d4a72c"],["hp","Heart Piece","#e0506a"],["hc","Heart Container","#b8323f"],
+ ["eq","Equipment","#7aa2ff"],["it","Item","#5ec4b6"],["gfy","Great Fairy","#ff9ad5"],["up","Capacity Upgrade","#9b7bff"],["sg","Song","#55c7f0"],
+ ["qi","Stone / Medallion / Pass","#f0a35a"],["ds","Dungeon cleared","#c0564a"],["bt","Bottle","#8ad1ff"],["mk","Child Trade / Mask","#f28ad0"],["tr","Adult Trade","#c9a86a"],
+ ["di","Map / Compass / Boss Key","#8c9bb0"],["bp","Big Poe","#a98bff"],["bn","Magic Bean Spot","#7bd88f"],["bss","Business Scrub Seed","#b5d86a"],
+ ["sq","Side Quest / Reward","#ffd36a"],["tt","Time Trial","#ffb347"],["bg","Boss Gauntlet","#ff7f50"],["fth","Fairy's Thought","#c8f2ff"],
+ ["gst","Gossip Stone","#9aa5b5"],["cow","Cow","#d9c7a7"]
+];
+// Item: [id, cat, area, name, age(C/A/B), time(D/N/""), how-to, requirements, optional?]
+const ITEMS = [
+// ===== GOLD SKULLTULAS (100) — numbered as on the remake location list =====
+["gs_1","gs","dt","#1 Wall by the alcove, 3F","C","","Great Deku Tree. Climb to the top floor; the token sits on the wall by the alcove.",""],
+["gs_2","gs","dt","#2 Vine wall on B1","C","","Great Deku Tree basement. Shoot it off the vines.","Slingshot"],
+["gs_3","gs","dt","#3 By the web-covered grate","C","","Great Deku Tree. Shoot it through the webbing.","Slingshot"],
+["gs_4","gs","dt","#4 Vine wall near the torch room","C","","Great Deku Tree. On the vines beside the torch room.","Slingshot"],
+["gs_5","gs","mk","#5 Guard house storeroom","C","","Hyrule Castle Town guard house. Break the crates.",""],
+["gs_6","gs","hc","#6 Palm tree in the garden","C","","Hyrule Castle grounds. Roll into the palm tree in the garden.",""],
+["gs_7","gs","kak","#7 House under construction","C","N","Kakariko. On the unfinished house frame at night.","Slingshot"],
+["gs_8","gs","kak","#8 Wall by the blue door (House of Skulltula)","C","N","Kakariko. On the wall of the House of Skulltula at night.",""],
+["gs_9","gs","kak","#9 Tree in the village square","C","N","Kakariko. Roll into the tree at night.",""],
+["gs_10","gs","kak","#10 Windmill ladder","C","N","Kakariko. On the windmill by the ladder at night.","Slingshot"],
+["gs_11","gs","gy","#11 Soft soil by the wall","C","","Graveyard, path back to the village. Drop a bug on the soft soil.","Bug in a bottle"],
+["gs_12","gs","kak","#12 Plaster wall under the eaves (red door)","C","N","Kakariko. On the plaster wall under the eaves at night.",""],
+["gs_13","gs","llr","#13 Tree by the stone wall near the silo","C","","Lon Lon Ranch. Roll into the tree.",""],
+["gs_14","gs","lh","#14 Soft soil by the barrels","C","","Lake Hylia. Drop a bug on the soft soil.","Bug in a bottle"],
+["gs_15","gs","gv","#15 Soft soil on the rock shelf","C","","Gerudo Valley, cave beside the waterfall. Drop a bug on the soft soil.","Bug in a bottle"],
+["gs_16","gs","kf","#16 Tree trunk beside the houses","C","N","Kokiri Forest at night. Kill it on the tree trunk.",""],
+["gs_17","gs","lw","#17 Soft soil near the first Business Scrub","C","","Lost Woods, dark section. Drop a bug on the soft soil.","Bug in a bottle"],
+["gs_18","gs","lw","#18 Soft soil by the second Scrub","C","","Lost Woods. Drop a bug on the soft soil.","Bug in a bottle"],
+["gs_19","gs","kf","#19 Soft soil behind the Kokiri Shop","C","","Kokiri Forest. Drop a bug on the soft soil.","Bug in a bottle"],
+["gs_20","gs","dmt","#20 Soft soil in the red-rock cave","C","","Death Mountain Trail, cave past the Tektites. Drop a bug on the soft soil.","Bug in a bottle"],
+["gs_21","gs","dc","#21 Net wall above the stone steps","C","","Dodongo Cavern. Shoot it on the net above the steps.","Slingshot"],
+["gs_22","gs","dc","#22 Small cave in the southeast corner","C","","Dodongo Cavern. In the small side cave.","Slingshot"],
+["gs_23","gs","dc","#23 Cave of the Dodongos on 2F","C","","Dodongo Cavern 2F. Bomb the wall of the Dodongo den.","Bombs"],
+["gs_24","gs","dc","#24 Side room behind the block room","C","","Dodongo Cavern. Bomb open the side room.","Bombs"],
+["gs_25","gs","dmc","#25 First alcove with the golden pot","C","","Death Mountain Crater, alcove near the trail entrance.",""],
+["gs_26","gs","dmt","#26 Small cave behind a cracked rock","C","","Death Mountain Trail. Bomb the cracked rock.","Bombs"],
+["gs_27","gs","gc","#27 Side cave behind the boulder wall","C","","Goron City. Bomb the boulders, break the crate.","Bombs"],
+["gs_28","gs","zr","#28 Soft soil by the Bean Seller","C","","Zora River. Drop a bug on the soft soil.","Bug in a bottle"],
+["gs_29","gs","zr","#29 Rock wall below the crest stone","C","N","Zora River, waterfall overhang, at night.",""],
+["gs_30","gs","zf","#30 Big tree beside the path","C","","Zora Fountain. Roll into the big tree.",""],
+["gs_31","gs","jj","#31 Above the room of pots","C","","Jabu-Jabu's Belly. On the vines above the pot room.","Slingshot"],
+["gs_32","gs","jj","#32 B1 cave ceiling","C","","Jabu-Jabu's Belly. Boomerang it off the ceiling.","Boomerang"],
+["gs_33","gs","jj","#33 Dark passage past the first ceiling token","C","","Jabu-Jabu's Belly. In the dark archway.","Boomerang"],
+["gs_34","gs","jj","#34 Vine pillar on 2F","C","","Jabu-Jabu's Belly 2F.","Boomerang"],
+["gs_35","gs","zf","#35 Cliff wall above the slanted stone ruin","C","N","Zora Fountain at night.","Boomerang"],
+["gs_36","gs","lh","#36 Tower wall of the Lakeside Laboratory","C","N","Lake Hylia at night.","Boomerang"],
+["gs_37","gs","llr","#37 House wall beside the entrance arch","C","N","Lon Lon Ranch at night.","Boomerang"],
+["gs_38","gs","llr","#38 Stone tower","C","N","Lon Lon Ranch at night, on the tower.","Boomerang"],
+["gs_39","gs","hf","#39 Grotto at the foot of the cliffs","C","","Hyrule Field, south woods grotto. Bomb it open.","Bombs, Boomerang"],
+["gs_40","gs","gv","#40 Wall by the river channel","C","N","Gerudo Valley at night.","Boomerang"],
+["gs_41","gs","gy","#41 Wall behind Dampé's hut","C","N","Graveyard at night.","Boomerang"],
+["gs_42","gs","hf","#42 Lone tree where the river ends","C","","Hyrule Field. Roll into the lone tree.",""],
+["gs_43","gs","hc","#43 Ruined archway on the road to Ganondorf's Castle","A","","Outside the castle, on the ruined archway.","Hookshot"],
+["gs_44","gs","kf","#44 Behind the House of the Twins","A","N","Kokiri Forest at night.","Hookshot"],
+["gs_45","gs","lw","#45 Ledge above the bean plant","A","N","Lost Woods at night. Ride the bean plant up.","Magic Bean planted"],
+["gs_46","gs","sfm","#46 Dead end of the maze","A","N","Sacred Grove maze at night.","Hookshot"],
+["gs_47","gs","ft","#47 Vine wall in the first room","A","","Forest Temple.","Hookshot"],
+["gs_48","gs","ft","#48 Stairs landing above the main hall","A","","Forest Temple.","Hookshot"],
+["gs_49","gs","ft","#49 Ivy room wall","A","","Forest Temple.","Hookshot"],
+["gs_50","gs","ft","#50 Web in the corridor on B2","A","","Forest Temple. Burn the web.","Din's Fire, Hookshot"],
+["gs_51","gs","ft","#51 Scarecrow perch in the courtyard","A","","Forest Temple courtyard. Summon Pierre, hookshot across.","Scarecrow's Song, Hookshot"],
+["gs_52","gs","dc","#52 Cave above the scarecrow","A","","Dodongo Cavern. Summon Pierre to reach the cave.","Scarecrow's Song, Hookshot"],
+["gs_53","gs","gc","#53 Cave wall beside the mesh walkway","A","","Goron City. Shoot it from the walkway.","Bow"],
+["gs_54","gs","dmc","#54 Soft soil on the lava rim","C","","Death Mountain Crater. Warp down as a child and drop a bug on the soil.","Bug in a bottle, Bolero of Fire"],
+["gs_55","gs","fit","#55 Stone idol in the tiled room","A","","Fire Temple. Play the Song of Time, bomb the idol.","Song of Time, Bombs"],
+["gs_56","gs","fit","#56 Rubble wall on 3F","A","","Fire Temple. Bomb the rubble.","Bombs"],
+["gs_57","gs","fit","#57 Boulder pile","A","","Fire Temple. Smash the boulders.","Megaton Hammer"],
+["gs_58","gs","fit","#58 5F corridor wall","A","","Fire Temple. Summon Pierre on 5F.","Scarecrow's Song, Hookshot"],
+["gs_59","gs","fit","#59 Lava room beside it","A","","Fire Temple, lava room next to the 5F corridor.","Scarecrow's Song, Hookshot"],
+["gs_60","gs","dmt","#60 Cave past the net slope","A","","Death Mountain Trail. Smash the boulder.","Megaton Hammer"],
+["gs_61","gs","dmt","#61 Dark tunnel toward Goron City","A","N","Death Mountain Trail at night. Smash the boulder.","Megaton Hammer"],
+["gs_62","gs","zr","#62 Rocky ledge above the water","A","N","Zora River at night.","Hookshot"],
+["gs_63","gs","zd","#63 Pillar by the frozen bridge","A","N","Zora Domain at night.","Hookshot"],
+["gs_64","gs","ic","#64 Frozen ruins","A","","Ice Cavern.","Hookshot"],
+["gs_65","gs","ic","#65 Ice walkway","A","","Ice Cavern.","Hookshot"],
+["gs_66","gs","ic","#66 Beyond the Compass chest","A","","Ice Cavern.","Hookshot"],
+["gs_67","gs","gv","#67 Rock arch on the canyon path","A","N","Gerudo Valley at night.","Longshot"],
+["gs_68","gs","lh","#68 Beneath the laboratory floor","A","","Lakeside Laboratory. Sink to the cellar and hookshot it.","Hookshot, Iron Boots"],
+["gs_69","gs","wt","#69 Flooded cave on 2F","A","","Water Temple.","Longshot"],
+["gs_70","gs","wt","#70 Ceiling of the glyph chamber","A","","Water Temple.","Longshot"],
+["gs_71","gs","wt","#71 Golden corridor waterfall","A","","Water Temple.","Longshot"],
+["gs_72","gs","wt","#72 Flooded hall on B1","A","","Water Temple. Sink down and longshot it.","Longshot, Iron Boots"],
+["gs_73","gs","wt","#73 Stained-glass wall on 2F","A","","Water Temple. Hammer the switch, shoot it.","Megaton Hammer, Bow"],
+["gs_74","gs","lh","#74 Hollow of the big tree","A","N","Lake Hylia at night.",""],
+["gs_75","gs","hc","#75 Grotto under the tree near sleeping Talon","C","","Hyrule Castle grounds. Play the Song of Storms by the tree, bomb the grotto.","Song of Storms, Bombs, Boomerang"],
+["gs_76","gs","botw","#76 Wall of the torch-lit room","C","","Bottom of the Well.","Boomerang"],
+["gs_77","gs","botw","#77 Shaft above the corridor","C","","Bottom of the Well, dark corridor.","Lens of Truth, Boomerang"],
+["gs_78","gs","botw","#78 Wall opposite the door","C","","Bottom of the Well, skull niche room.","Lens of Truth, Boomerang"],
+["gs_79","gs","st","#79 Above the chest past the eye door","A","","Shadow Temple.",""],
+["gs_80","gs","st","#80 Barred gate corridor","A","","Shadow Temple.","Longshot"],
+["gs_81","gs","st","#81 Skull statue room","A","","Shadow Temple, fan corridor.","Longshot"],
+["gs_82","gs","st","#82 Cage on the walkways","A","","Shadow Temple. Summon Pierre by the cage.","Longshot, Scarecrow's Song"],
+["gs_83","gs","st","#83 Round platform with the cauldrons","A","","Shadow Temple.",""],
+["gs_84","gs","gv","#84 Wall of the ruin by the tents","A","N","Gerudo Valley at night.","Longshot"],
+["gs_85","gs","gf","#85 Sloped wall over the courtyard","A","N","Gerudo Fortress rooftop at night.","Longshot"],
+["gs_86","gs","hw","#86 Underground ruin","A","","Mirage Desert.","Longshot"],
+["gs_87","gs","col","#87 Cliff wall beyond the sanctum","A","N","Evil Desert Colossus at night.","Longshot"],
+["gs_88","gs","col","#88 Soft soil by the temple wall","C","","Evil Desert Colossus. Warp as a child, drop a bug on the soil.","Bug in a bottle, Requiem of Spirit"],
+["gs_89","gs","gf","#89 Target pole at the horseback archery range","A","N","Gerudo Fortress at night.","Longshot"],
+["gs_90","gs","col","#90 Rock pillar across the sand","A","N","Evil Desert Colossus at night. Ride the bean plant.","Magic Bean planted, Longshot"],
+["gs_91","gs","spt","#91 Mesh room wall","C","","Spirit Temple, child side.","Boomerang"],
+["gs_92","gs","spt","#92 Ceiling above the stairs on 3F","C","","Spirit Temple, child side.","Boomerang"],
+["gs_93","gs","spt","#93 Carved wall on 2F","C","","Spirit Temple, child side.",""],
+["gs_94","gs","spt","#94 Alcove past the Song of Time door","A","","Spirit Temple, adult side.","Song of Time, Silver Gauntlets"],
+["gs_95","gs","spt","#95 Niche on 3F","A","","Spirit Temple, adult side. Summon Pierre.","Longshot, Scarecrow's Song, Silver Gauntlets"],
+["gs_96","gs","kak","#96 Roof of Impa's house","A","N","Kakariko at night.","Longshot"],
+["gs_97","gs","zr","#97 Mossy overlook by the footbridge","A","N","Zora River at night.","Longshot"],
+["gs_98","gs","lh","#98 Grotto on the far shore","C","","Lake Hylia grotto.",""],
+["gs_99","gs","hf","#99 Marsh grotto","A","","Hyrule Field. Bomb open the marsh grotto as a child and kill the normal Skulltula first; return as an adult.","Bombs"],
+["gs_100","gs","zf","#100 Second cave of the snowfield","A","","Zora Fountain snowfield. Lift the boulder.","Silver Gauntlets, Longshot"],
+// ===== HEART PIECES (36) — numbered as on the remake location list =====
+["hp_1","hp","kak","#1 Rooftop Cucco","C","","Kakariko. Grab a Cucco and glide onto the rooftop.","Cucco"],
+["hp_2","hp","gy","#2 Dampé's Gravedigging Tour","C","N","Graveyard at night. Pay Dampé 10 rupees per dig until he digs up the piece.","10 rupees"],
+["hp_3","hp","llr","#3 Tower crates","C","","Lon Lon Ranch. Push the crates in the tower to uncover it.",""],
+["hp_4","hp","gv","#4 Cucco ledge chest","C","","Gerudo Valley. Glide across with a Cucco to the chest on the ledge.","Cucco"],
+["hp_5","hp","gv","#5 Waterfall cliff","C","","Gerudo Valley. Drop down to the ledge by the waterfall.",""],
+["hp_6","hp","lh","#6 Fishing Pond (child)","C","","Lake Hylia. Catch a big fish as a child (10 rupees a go).","10 rupees"],
+["hp_7","hp","mk","#7 Richard the lost dog","C","N","Castle Town at night. Find Richard (the dog) and return him to the woman in the back alley.",""],
+["hp_8","hp","lw","#8 Skull Kid ocarina game","C","","Lost Woods. Repeat the Skull Kids' melody on the stump.","Ocarina"],
+["hp_9","hp","lw","#9 Skull Kid, Saria's Song","C","","Lost Woods. Play Saria's Song for the Skull Kid on the stump.","Saria's Song"],
+["hp_10","hp","gc","#10 Spinning pot","C","","Goron City. Light the torches and stop the giant pot on the heart.","Bombs, Deku Stick"],
+["hp_11","hp","dmc","#11 Hidden nook","C","","Death Mountain Crater. Climb the net to the nook.",""],
+["hp_12","hp","kak","#12 Owl ride rooftop","C","","Let Kaepora Gaebora carry you from Death Mountain summit to the Kakariko rooftop.",""],
+["hp_13","hp","mk","#13 Bombchu Bowling (third win)","C","","Castle Town. 10 rupees per play; the third win pays the Heart Piece.","Bombs, 10 rupees"],
+["hp_14","hp","zr","#14 Cucco islets","C","","Zora River. Glide to the islets with a Cucco.","Cucco"],
+["hp_15","hp","zr","#15 Cucco ledge","C","","Zora River. Glide to the high ledge with a Cucco.","Cucco"],
+["hp_16","hp","zd","#16 Torch chest","C","","Zora Domain. Light the torches in the corridor with a lit Deku Stick.","Deku Stick"],
+["hp_17","hp","gy","#17 Magic Bean ride","A","","Graveyard. Ride the bean plant up to the ledge.","Magic Bean planted"],
+["hp_18","hp","kak","#18 Windmill","A","","Kakariko. Exit Dampé's tunnel into the windmill and grab it from the platform.","Dampé race exit"],
+["hp_19","hp","gy","#19 Dampé's Race under a minute","A","","Graveyard. Beat Dampé's ghost in under 1:00 on a second run.","Hookshot"],
+["hp_20","hp","kak","#20 Cursed Rich Man (50 tokens)","B","","House of Skulltula. Reward once 50 curses are lifted.","50 Gold Skulltula tokens"],
+["hp_21","hp","lh","#21 Lake Hylia tower","A","","Lake Hylia. Ride the bean plant, then climb the ladder to the tower top.","Magic Bean planted"],
+["hp_22","hp","lh","#22 Lakeside Laboratory diving","A","","Dive to the bottom of the lab's pool and talk to the scientist.","Golden Scale"],
+["hp_23","hp","dmt","#23 Death Mountain Trail Magic Bean","A","","Ride the bean plant at the top of the trail net.","Magic Bean planted"],
+["hp_24","hp","dmc","#24 Death Mountain Crater Magic Bean","A","","Warp in with the Bolero and ride the bean plant.","Bolero of Fire, Magic Bean planted"],
+["hp_25","hp","zf","#25 Iceberg","A","","Zora Fountain. Cross the ice floes to the piece.",""],
+["hp_26","hp","zf","#26 Underwater cave","A","","Zora Fountain. Dive under the ice to the cave.","Zora Tunic"],
+["hp_27","hp","zr","#27 Frogs: Song of Storms","C","","Zora River. Play the Song of Storms for the Fabulous Five Froggish Tenors.","Song of Storms"],
+["hp_28","hp","zr","#28 Frogs: bug-catching game","C","","Zora River. After all their songs, play the Song of Time and hit the frogs as the bugs appear.","Song of Time, Song of Storms"],
+["hp_29","hp","mk","#29 Treasure Box Shop","C","","Castle Town. 10 rupees; use the Lenses to pick the right chests.","Lens of Truth, 10 rupees"],
+["hp_30","hp","gf","#30 Scarecrow chest","A","","Gerudo Fortress. Summon Pierre, longshot to the chest.","Scarecrow's Song, Longshot"],
+["hp_31","hp","gf","#31 Horseback archery (1,000 points)","A","","Gerudo Fortress. 30 rupees a round.","Epona, Bow, 30 rupees"],
+["hp_32","hp","col","#32 Magic Bean ride","A","","Evil Desert Colossus. Ride the bean plant and shoot the target.","Magic Bean planted, Bow"],
+["hp_33","hp","gy","#33 Tombstone chest","B","","Graveyard. Pull the tombstone and drop into the grave.",""],
+["hp_34","hp","hf","#34 Business Scrub grotto","C","","Hyrule Field. Read the Fairy's Thought at the tree as an adult for the password, then buy the piece as a child (100 rupees).","Fairy's Thought read as adult, 100 rupees"],
+["hp_35","hp","hf","#35 Canyon chest","C","","Hyrule Field. Read the Fairy's Thought beside the chest as an adult; the lock is undone for child Link.","Fairy's Thought read as adult"],
+["hp_36","hp","dmc","#36 Business Scrub","C","","Death Mountain Crater. Buy it from the Business Scrub (100 rupees).","100 rupees"],
+// ===== HEART CONTAINERS (8) =====
+["hc_1","hc","dt","Gohma","C","","Great Deku Tree boss.",""],
+["hc_2","hc","dc","King Dodongo","C","","Dodongo Cavern boss.","Bombs"],
+["hc_3","hc","jj","Barinade","C","","Lord Jabu-Jabu's Belly boss.","Boomerang"],
+["hc_4","hc","ft","Phantom Ganon","A","","Forest Temple boss.","Bow"],
+["hc_5","hc","fit","Volvagia","A","","Fire Temple boss.","Megaton Hammer"],
+["hc_6","hc","wt","Morpha","A","","Water Temple boss.","Longshot"],
+["hc_7","hc","st","Bongo Bongo","A","","Shadow Temple boss.","Lens of Truth, Bow"],
+["hc_8","hc","spt","Twinrova","A","","Spirit Temple boss.","Mirror Shield"],
+// ===== DUNGEONS WITHOUT A BOSS + FINAL BATTLE (4) =====
+["ds_ic","ds","ic","Ice Cavern cleared","A","","Beat the White Wolfos and take the Iron Boots.",""],
+["ds_botw","ds","botw","Bottom of the Well cleared","C","","Beat Dead Hand for the Lenses of Truth.",""],
+["ds_gtg","ds","gtg","Gerudo Proving Grounds cleared","A","","Full dungeon run; the Ice Arrow is the final prize.",""],
+["ds_gan","ds","ogc","Defeat Ganondorf and Ganon","A","","Clear the six barriers, beat Ganondorf, escape the tower, beat Ganon.","Light Arrows, Master Sword"],
+// ===== EQUIPMENT (12) =====
+["eq_ks","eq","kf","Kokiri Sword","C","","Crawl through the hidden passage in the training area.",""],
+["eq_ms","eq","tot","Master Sword","B","","Place the three Spiritual Stones, play the Song of Time, draw the sword.","3 Spiritual Stones, Ocarina of Time, Song of Time"],
+["eq_gk","eq","gc","Giant's Knife","A","","Buy from Medigoron (200 rupees). Breaks; superseded by the Biggoron Sword.","200 rupees","opt"],
+["eq_bgs","eq","dmt","Biggoron Sword","A","","Finish the trading sequence; wait three days and hand Biggoron the receipt.","Biggoron Receipt"],
+["eq_ds","eq","kf","Deku Shield","C","","Kokiri Shop, 40 rupees.","40 rupees"],
+["eq_hs","eq","gy","Hylian Shield","C","","Graveyard grave chest (pull the tombstone; the Sun's Song freezes the ReDead), or buy it at the Bazaar.",""],
+["eq_mr","eq","spt","Mirror Shield","A","","Spirit Temple, adult side: chest on the statue's hand.",""],
+["eq_hcl","eq","tot","Hero's Clothes","A","","Worn automatically when Link becomes an adult.","Master Sword"],
+["eq_gt","eq","gc","Goron Tunic","A","","Talk to the small Goron (Link) in Goron City as an adult.",""],
+["eq_zt","eq","zd","Zora Tunic","A","","Free King Zora with Blue Fire.","Blue Fire"],
+["eq_ib","eq","ic","Iron Boots","A","","Ice Cavern: beat the White Wolfos.","Blue Fire"],
+["eq_hb","eq","st","Hover Boots","A","","Shadow Temple: beat the mini-boss in the mist.",""],
+// ===== ITEMS (23) =====
+["it_sling","it","dt","Fairy Slingshot","C","","Great Deku Tree chest.",""],
+["it_bow","it","ft","Fairy Bow","A","","Forest Temple, Stalfos room.",""],
+["it_fa","it","lh","Fire Arrow","A","","After the Water Temple, shoot the rising sun from the Lake Hylia warp island at dawn.","Bow, Water Medallion"],
+["it_ia","it","gtg","Ice Arrow","A","","Gerudo Proving Grounds: 30 rupees to enter, final chest of the full dungeon.","30 rupees"],
+["it_la","it","tot","Light Arrow","A","","Story scene in the Temple of Time after the five temples.","Shadow + Spirit Medallions"],
+["it_boom","it","jj","Boomerang","C","","Jabu-Jabu's Belly chest (bring a bottled fish to enter).",""],
+["it_hook","it","gy","Hookshot","A","","Keep pace with Dampé's ghost through his tunnels.",""],
+["it_long","it","wt","Longshot","A","","Water Temple: beat Dark Link.","Hookshot"],
+["it_ham","it","fit","Megaton Hammer","A","","Fire Temple: beat the Flare Dancer on 5F.","Goron Tunic"],
+["it_gb","it","gc","Goron Bracelet","C","","Play Saria's Song for Darunia.","Saria's Song, Zelda's Lullaby"],
+["it_sg","it","spt","Silver Gauntlets","C","","Spirit Temple, child half: chest on the statue's hand.",""],
+["it_gg","it","ogc","Golden Gauntlets","A","","Ganondorf's Castle, Shadow trial chest.","Bow, Lens of Truth"],
+["it_bomb","it","dc","Bomb Bag (Bombs)","C","","Dodongo Cavern chest.",""],
+["it_chu","it","mk","Bombchus (first Bombchu Bowling win)","C","","Castle Town Bombchu Bowling, 10 rupees per play; the first win pays 10 Bombchus.","Bombs, 10 rupees"],
+["it_stick","it","kf","Deku Sticks","C","","Cut a Deku Baba stem, or buy at the Kokiri Shop.",""],
+["it_nut","it","dt","Deku Nuts","C","","Cut a Deku Baba head in the Great Deku Tree.",""],
+["it_lens","it","botw","Lenses of Truth","C","","Bottom of the Well: beat Dead Hand.",""],
+["it_ss","it","zd","Silver Scale","C","","Zora Domain diving game: five scales in 40 seconds.",""],
+["it_gsc","it","lh","Golden Scale","A","","Fishing Pond as an adult (30 rupees): land a fish over 60 cm.","30 rupees"],
+["it_echo","it","kak","Echo Gem (20 tokens)","B","","Cursed Rich Man's reward at 20 tokens. Lights up and sounds near a Gold Skulltula (replaces the Stone of Agony).","20 Gold Skulltula tokens"],
+["it_foc","it","kf","Fairy Ocarina","C","","Saria gives it on the bridge after the Great Deku Tree.",""],
+["it_oot","it","hf","Ocarina of Time","C","","Dive for it in the castle moat after Ganondorf's escape.","3 Spiritual Stones"],
+["it_bean","it","zr","Magic Beans","C","","Bean Seller on Zora River, 10 rupees for the first (rises by 10 each, up to 100).","10-100 rupees"],
+// ===== GREAT FAIRIES (6) — each now asks for rupees =====
+["gfy_din","gfy","dmt","Great Fairy of Magic: Din's Fire + Magic Meter","C","","Death Mountain summit. Bomb the boulder, play Zelda's Lullaby, pay 25 rupees.","Bombs, Zelda's Lullaby, 25 rupees"],
+["gfy_spin","gfy","hc","Great Fairy of Power: Enhanced Spin Attack","C","","Hyrule Castle grounds. Bomb the boulder at the back, play Zelda's Lullaby, pay 50 rupees.","Bombs, Zelda's Lullaby, 50 rupees"],
+["gfy_far","gfy","zf","Great Fairy of Magic: Farore's Wind","C","","Zora Fountain. Bomb the cracked wall, play Zelda's Lullaby, pay 100 rupees.","Bombs, Zelda's Lullaby, 100 rupees"],
+["gfy_dm","gfy","dmc","Great Fairy of Wisdom: Double Magic","A","","Death Mountain Crater. Smash the boulders, play Zelda's Lullaby, pay 200 rupees.","Megaton Hammer, Zelda's Lullaby, 200 rupees"],
+["gfy_nay","gfy","col","Great Fairy of Magic: Nayru's Love","A","","Evil Desert Colossus. Smash the wall by the temple, play Zelda's Lullaby, pay 300 rupees.","Megaton Hammer, Zelda's Lullaby, 300 rupees"],
+["gfy_dd","gfy","hc","Great Fairy of Courage: Halved damage","A","","Near Ganondorf's Castle. Lift the pillar, play Zelda's Lullaby, pay 500 rupees.","Golden Gauntlets, Zelda's Lullaby, 500 rupees"],
+// ===== CAPACITY UPGRADES (13) =====
+["up_w0","up","kf","Kokiri Wallet (200 rupees)","C","","You start with it.",""],
+["up_w1","up","kak","Adult's Wallet (500 rupees)","B","","Cursed Rich Man, 10 tokens.","10 Gold Skulltula tokens"],
+["up_w2","up","kak","Giant's Wallet (1,000 rupees)","B","","Cursed Rich Man, 30 tokens.","30 Gold Skulltula tokens"],
+["up_bg1","up","gc","Bigger Bomb Bag (30)","C","","Stop the rolling Goron in Goron City with a bomb.","Bombs"],
+["up_bg2","up","mk","Biggest Bomb Bag (40)","C","","Second Bombchu Bowling win.","Bombs, 10 rupees"],
+["up_bb1","up","mk","Bigger Deku-Seed Bag (40)","C","","Castle Town Shooting Gallery, 10 rupees.","Slingshot, 10 rupees"],
+["up_bb2","up","lw","Biggest Deku-Seed Bag (50)","C","","Lost Woods target game.","Slingshot"],
+["up_qv1","up","kak","Bigger Quiver (40)","A","","Kakariko Shooting Gallery, 30 rupees.","Bow, 30 rupees"],
+["up_qv2","up","gf","Biggest Quiver (50)","A","","Horseback archery, 1,400 points.","Epona, Bow, 30 rupees"],
+["up_st1","up","lw","Bigger Deku-Stick Bag (20)","C","","Business Scrub in the Lost Woods, 40 rupees.","40 rupees"],
+["up_nt1","up","lw","Bigger Deku-Nut Bag","C","","Business Scrub in the boulder grotto, Lost Woods, 40 rupees.","Bombs, 40 rupees"],
+["up_nt2","up","lw","Second Deku-Nut Bag (40)","C","","Forest Stage: wear the Mask of Truth for the large Deku Scrub.","Mask of Truth"],
+["up_st2","up","lw","Biggest Deku-Stick Bag (30)","C","","Forest Stage: wear the Skull Mask for the Deku Scrubs.","Skull Mask"],
+// ===== SONGS (13) =====
+["sg_zl","sg","hc","Zelda's Lullaby","C","","Impa, castle courtyard.",""],
+["sg_su","sg","gy","Sun's Song","B","","Royal Family's Tomb: play Zelda's Lullaby at the Triforce tombstone, read the tablet.","Zelda's Lullaby"],
+["sg_ep","sg","llr","Epona's Song","C","","Malon at Lon Lon Ranch.","Fairy Ocarina"],
+["sg_sa","sg","sfm","Saria's Song","C","","Saria in the Sacred Grove glade.",""],
+["sg_ti","sg","hf","Song of Time","C","","Zelda's message after you pick up the Ocarina of Time.","Ocarina of Time"],
+["sg_st","sg","kak","Song of Storms","A","","Music Man in the Kakariko windmill.","Ocarina"],
+["sg_mi","sg","sfm","Minuet of the Forest","A","","Sheik, Sacred Grove.",""],
+["sg_pr","sg","tot","Prelude of Light","A","","Sheik, Temple of Time, after the Forest Medallion.","Forest Medallion"],
+["sg_bo","sg","dmc","Bolero of Fire","A","","Sheik, Death Mountain Crater.",""],
+["sg_se","sg","ic","Serenade of Water","A","","Sheik, Ice Cavern, after the Iron Boots.","Iron Boots"],
+["sg_no","sg","kak","Nocturne of Shadow","A","","Sheik, Kakariko, after Forest, Fire and Water Medallions.","Forest + Fire + Water Medallions"],
+["sg_re","sg","col","Requiem of Spirit","B","","Sheik, Evil Desert Colossus, on leaving the Spirit Temple.",""],
+["sg_sc","sg","lh","Scarecrow Song","B","","Play your own tune for Bonooru as a child, then again as an adult.","Ocarina"],
+// ===== SPIRITUAL STONES, MEDALLIONS, PASS (10) =====
+["qi_ke","qi","dt","Kokiri Emerald","C","","After Gohma.",""],
+["qi_gr","qi","dc","Goron Ruby","C","","After King Dodongo.",""],
+["qi_zs","qi","jj","Zora Sapphire","C","","After Barinade.",""],
+["qi_lm","qi","tot","Light Medallion","A","","Rauru, Chamber of Sages, on becoming an adult.","Master Sword"],
+["qi_fm","qi","ft","Forest Medallion","A","","After Phantom Ganon.",""],
+["qi_fim","qi","fit","Fire Medallion","A","","After Volvagia.",""],
+["qi_wm","qi","wt","Water Medallion","A","","After Morpha.",""],
+["qi_sm","qi","st","Shadow Medallion","A","","After Bongo Bongo.",""],
+["qi_spm","qi","spt","Spirit Medallion","A","","After Twinrova.",""],
+["qi_gc","qi","gf","Gerudo Pass","A","","Free all four carpenters from the fortress cells.",""],
+// ===== BOTTLES (5) =====
+["bt_1","bt","mk","Bottle 1: Potion Shop bug","C","","Castle Town Potion Shop: catch the bug that escaped in the shop.",""],
+["bt_2","bt","kak","Bottle 2: Cucco Lady","C","","Bring all seven Cuccos back to the pen.",""],
+["bt_3","bt","llr","Bottle 3: Talon's Super Cucco game (Lon Lon Milk)","C","","Pay Talon 10 rupees and find his three Cuccos within 30 seconds.","10 rupees"],
+["bt_4","bt","lh","Bottle 4: Ruto's Letter","C","","Fetch the bottle from the post in the water at Lake Hylia, then show King Zora.",""],
+["bt_5","bt","mk","Bottle 5: Poe Collector (500 points)","A","","Sell 5 Big Poes to the Poe Collector (100 points each).","5 Big Poes"],
+// ===== CHILD TRADE / MASKS (10) =====
+["mk_egg","mk","hc","Weird Egg","C","","Malon, outside the castle gate; hatches into the Wake-Up Cucco.",""],
+["mk_zl","mk","hc","Zelda's Letter","C","","Wake Talon, sneak in, meet Zelda.","Weird Egg"],
+["mk_ke","mk","kak","Keaton Mask: sold","C","","Borrow it (10 rupees); the Kakariko gate guard pays 15.","Zelda's Letter, 10 rupees"],
+["mk_sk","mk","lw","Skull Mask: sold","C","","Borrow it (20 rupees); the Skull Kid in the Lost Woods pays 10, cover the rest.","Keaton Mask returned, 20 rupees"],
+["mk_sp","mk","gy","Spooky Mask: sold","C","D","Borrow it (30 rupees); the Graveyard boy pays 50 by day.","Skull Mask returned, 30 rupees"],
+["mk_bh","mk","hf","Bunny Hood: sold","C","D","Borrow it (50 rupees); the Running Man in Hyrule Field pays a Gold Rupee (200).","Spooky Mask returned, 50 rupees"],
+["mk_mt","mk","mk","Mask of Truth","C","","Free from the Happy Mask Shop once the Bunny Hood is paid for.","Four masks sold"],
+["mk_gm","mk","mk","Goron Mask (borrow)","C","","Happy Mask Shop after the Mask of Truth. Just for fun.","Mask of Truth","opt"],
+["mk_zm","mk","mk","Zora Mask (borrow)","C","","Happy Mask Shop after the Mask of Truth.","Mask of Truth","opt"],
+["mk_grm","mk","mk","Gerudo Mask (borrow)","C","","Happy Mask Shop after the Mask of Truth.","Mask of Truth","opt"],
+// ===== ADULT TRADE (11) =====
+["tr_1","tr","kak","Pocket Egg","A","","Cucco Lady, Kakariko.",""],
+["tr_2","tr","kak","Pocket Cucco","A","","Let the egg hatch (sleep or Sun's Song), wake Talon with it, show the Cucco Lady.","Pocket Egg"],
+["tr_3","tr","kak","Cojiro","A","","Cucco Lady gives Cojiro for the Pocket Cucco.","Pocket Cucco"],
+["tr_4","tr","lw","Odd Mushroom","A","","Master Craftsman's Son in the Lost Woods. 3-minute timer starts.","Cojiro"],
+["tr_5","tr","kak","Odd Poultice","A","","Granny's Potion Shop, Kakariko, within 3 minutes.","Odd Mushroom"],
+["tr_6","tr","lw","Poacher's Saw","A","","Fado in the Lost Woods.","Odd Poultice"],
+["tr_7","tr","gv","Broken Goron Sword","A","","Master Craftsman, Gerudo Valley.","Poacher's Saw"],
+["tr_8","tr","dmt","Prescription","A","","Biggoron, Death Mountain Trail.","Broken Goron Sword"],
+["tr_9","tr","zd","Eyeball Frog","A","","King Zora (thawed). 4-minute timer starts.","Prescription, King Zora thawed"],
+["tr_10","tr","lh","Specialty Eye Drops","A","","Lake Scientist, Lakeside Laboratory, within 4 minutes.","Eyeball Frog"],
+["tr_11","tr","dmt","Biggoron Receipt","A","","Biggoron, within 4 minutes (Bolero of Fire warp). Wait three days for the sword.","Eye Drops"],
+// ===== MAP / COMPASS / BOSS KEY (26) =====
+["di_dt_m","di","dt","Great Deku Tree: Dungeon Map","C","","",""],
+["di_dt_c","di","dt","Great Deku Tree: Compass","C","","Chest on the far ledge, third floor.",""],
+["di_dc_m","di","dc","Dodongo Cavern: Dungeon Map","C","","",""],
+["di_dc_c","di","dc","Dodongo Cavern: Compass","C","","Chest in the Armos room, 1F.",""],
+["di_jj_m","di","jj","Jabu-Jabu's Belly: Dungeon Map","C","","Chest on B1.",""],
+["di_jj_c","di","jj","Jabu-Jabu's Belly: Compass","C","","Chest on 1F.",""],
+["di_ft_m","di","ft","Forest Temple: Dungeon Map","A","","1F courtyard, arched alcove.",""],
+["di_ft_c","di","ft","Forest Temple: Compass","A","","2F, blue Poe wing.",""],
+["di_ft_b","di","ft","Forest Temple: Boss Key","A","","",""],
+["di_fi_m","di","fit","Fire Temple: Dungeon Map","A","","3F large chest.",""],
+["di_fi_c","di","fit","Fire Temple: Compass","A","","3F chest.",""],
+["di_fi_b","di","fit","Fire Temple: Boss Key","A","","Chest in the ninth Goron's cell.",""],
+["di_ic_m","di","ic","Ice Cavern: Dungeon Map","A","","Chest behind pink ice.","Blue Fire"],
+["di_ic_c","di","ic","Ice Cavern: Compass","A","","",""],
+["di_wt_m","di","wt","Water Temple: Dungeon Map","A","","",""],
+["di_wt_c","di","wt","Water Temple: Compass","A","","",""],
+["di_wt_b","di","wt","Water Temple: Boss Key","A","","",""],
+["di_bw_m","di","botw","Bottom of the Well: Dungeon Map","C","","","Lens of Truth"],
+["di_bw_c","di","botw","Bottom of the Well: Compass","C","","","Lens of Truth"],
+["di_st_m","di","st","Shadow Temple: Dungeon Map","A","","","Lens of Truth"],
+["di_st_c","di","st","Shadow Temple: Compass","A","","","Lens of Truth"],
+["di_st_b","di","st","Shadow Temple: Boss Key","A","","","Lens of Truth"],
+["di_sp_m","di","spt","Spirit Temple: Dungeon Map","C","","Child side.",""],
+["di_sp_c","di","spt","Spirit Temple: Compass","A","","Adult side.",""],
+["di_sp_b","di","spt","Spirit Temple: Boss Key","A","","Adult side, 4F ornate chest.","Mirror Shield"],
+["di_gc_b","di","ogc","Ganondorf's Castle: Boss Key","A","","Tower, after the Stalfos.",""],
+// ===== BIG POES (10) — 30 rupees + 100 points each =====
+["bp_1","bp","hf","Big Poe: hill south of Kokiri Forest","A","","Ride Epona over the spawn, shoot it, bottle it.","Epona, Bow, Bottle"],
+["bp_2","bp","hf","Big Poe: southwest of the ranch","A","","","Epona, Bow, Bottle"],
+["bp_3","bp","hf","Big Poe: Lake Hylia wetlands","A","","","Epona, Bow, Bottle"],
+["bp_4","bp","hf","Big Poe: south of the ranch","A","","","Epona, Bow, Bottle"],
+["bp_5","bp","hf","Big Poe: west of the ranch","A","","","Epona, Bow, Bottle"],
+["bp_6","bp","hf","Big Poe: Gerudo Valley incline","A","","","Epona, Bow, Bottle"],
+["bp_7","bp","hf","Big Poe: east of the ranch","A","","","Epona, Bow, Bottle"],
+["bp_8","bp","hf","Big Poe: ranch road","A","","","Epona, Bow, Bottle"],
+["bp_9","bp","hf","Big Poe: castle moat","A","","","Epona, Bow, Bottle"],
+["bp_10","bp","hf","Big Poe: castle road sign","A","","","Epona, Bow, Bottle"],
+// ===== MAGIC BEAN SPOTS (10) =====
+["bn_zr","bn","zr","Bean planted: Zora River (beside the Bean Seller)","C","","Soft soil #1.","Magic Bean"],
+["bn_lw1","bn","lw","Bean planted: Lost Woods (first Business Scrub)","C","","Soft soil #2, dark section.","Magic Bean"],
+["bn_lw2","bn","lw","Bean planted: Lost Woods (second Business Scrub)","C","","Soft soil #3. Needed for Gold Skulltula #45.","Magic Bean"],
+["bn_kf","bn","kf","Bean planted: Kokiri Forest (behind the shop)","C","","Soft soil #4.","Magic Bean"],
+["bn_dmt","bn","dmt","Bean planted: Death Mountain Trail (red-rock cave)","C","","Soft soil #5. Needed for Heart Piece #23.","Magic Bean"],
+["bn_gy","bn","gy","Bean planted: Graveyard","C","","Soft soil #6. Needed for Heart Piece #17.","Magic Bean"],
+["bn_lh","bn","lh","Bean planted: Lake Hylia (by the barrels)","C","","Soft soil #7. Needed for Heart Piece #21.","Magic Bean"],
+["bn_gv","bn","gv","Bean planted: Gerudo Valley (waterfall cave)","C","","Soft soil #8.","Magic Bean"],
+["bn_dmc","bn","dmc","Bean planted: Death Mountain Crater (lava rim)","C","","Soft soil #9. Needed for Heart Piece #24.","Magic Bean, Bolero of Fire"],
+["bn_col","bn","col","Bean planted: Evil Desert Colossus","C","","Soft soil #10. Needed for Gold Skulltula #90 and Heart Piece #32.","Magic Bean, Requiem of Spirit"],
+// ===== BUSINESS SCRUB SEED CHESTS (13) — new in the remake =====
+["bss_dc1","bss","dc","Scrub Seed: lava pillar chest","C","","Dodongo Cavern.",""],
+["bss_dc2","bss","dc","Scrub Seed: wooden cell chest","C","","Dodongo Cavern.",""],
+["bss_zr","bss","zr","Scrub Seed: cave between the blue pillars","C","","Zora River.",""],
+["bss_sfm","bss","sfm","Scrub Seed: chest by the first Gossip Stone","B","","Sacred Grove.",""],
+["bss_dmt","bss","dmt","Scrub Seed: boulder cave chest","C","","Death Mountain Trail.","Bombs"],
+["bss_dmc","bss","dmc","Scrub Seed: hammer cave chest","A","","Death Mountain Crater.","Megaton Hammer"],
+["bss_botw","bss","botw","Scrub Seed: dead-end chest","C","","Bottom of the Well.",""],
+["bss_llr","bss","llr","Scrub Seed: ruined tower chest","B","","Lon Lon Ranch.",""],
+["bss_gv","bss","gv","Scrub Seed: chest near the Cucco ledge","C","","Gerudo Valley.","Cucco"],
+["bss_st","bss","st","Scrub Seed: hidden path chest","A","","Shadow Temple.","Lens of Truth"],
+["bss_hw","bss","hw","Scrub Seed: torch chest","A","","Mirage Desert.",""],
+["bss_gtg","bss","gtg","Scrub Seed: plant room chest","A","","Gerudo Proving Grounds.",""],
+["bss_ogc","bss","ogc","Scrub Seed: Spirit barrier chest","A","","Ganondorf's Castle.",""],
+// ===== SIDE QUESTS / REWARDS =====
+["sq_epona","sq","llr","Epona (beat Ingo's races)","A","","Ingo Ranch: 20 rupees a ride, win both races.","Epona's Song, 20 rupees"],
+["sq_hall","sq","lh","Hall of Fallen Foes: first visit","B","","Sleep in a glowing green bed (Kakariko house as a child after the Forest Temple, or the ruined house by the Lakeside Laboratory as an adult).","Forest Medallion"],
+["sq_hall_all","sq","hof","Hall of Fallen Foes: every monster statue","B","","Defeat every enemy type at least once; Kaepora Gaebora counts the statues for you.","Forest Medallion","opt"],
+["sq_rich40","sq","kak","Cursed Rich Man: 20 Bombchus (40 tokens)","B","","House of Skulltula reward.","40 Gold Skulltula tokens"],
+["sq_rich100","sq","kak","Cursed Rich Man: Gold Rupee (100 tokens)","B","","House of Skulltula final reward.","100 Gold Skulltula tokens"],
+["sq_poe1000","sq","mk","Poe Collector: Gold Rupee (1,000 points)","A","","Sell all 10 Big Poes.","10 Big Poes"],
+["sq_shortcut","sq","gc","Goron City shortcut to the Lost Woods","C","","Bomb the boulders in Goron City to open the path.","Bombs","opt"],
+// ===== TIME TRIALS (5) =====
+["tt_obst","tt","llr","Obstacle course under 0:40","A","","Lon Lon Ranch on Epona. Prize: a cow delivered to Link's House.","Epona"],
+["tt_dampe","tt","gy","Dampé's Race under 1:00","A","","Second run pays Heart Piece #19.","Hookshot"],
+["tt_run","tt","gv","Running Man race under 2:18","A","","Gerudo Valley tent to Kokiri Forest. Purple and Red Rupee.","Epona"],
+["tt_cucco","tt","llr","Super Cucco Game under 0:30","C","","Talon's game; Lon Lon Milk bottle.","10 rupees"],
+["tt_rush","tt","hof","Boss Rush record","B","","Hall of Fallen Foes: set your own best time on the boss rematches.",""],
+// ===== BOSS GAUNTLETS (3) — Hall of Fallen Foes, trophies go to Link's House =====
+["bg_1","bg","hof","Trial of the Spiritual Stones (Stone Statue)","B","","Gohma, King Dodongo, Barinade back to back.","3 Spiritual Stones"],
+["bg_2","bg","hof","Trial of the Five Sages (Silver Statue)","A","","Phantom Ganon, Volvagia, Morpha, Bongo Bongo, Twinrova.","Five Medallions"],
+["bg_3","bg","hof","Trial of the Hero of Time (Gold Statue)","A","","All ten bosses, Gohma through Ganon.","Defeat Ganon"],
+// ===== FAIRY'S THOUGHTS (23) — new in the remake; Navi stops where a thought lingers =====
+["fth_1","fth","hf","Fairy's Thought: mossy ruined wall","B","","Hyrule Field.",""],
+["fth_2","fth","hf","Fairy's Thought: overturned cart","B","","Hyrule Field.",""],
+["fth_3","fth","dmt","Fairy's Thought: Death Mountain Trail at night","B","N","",""],
+["fth_4","fth","zr","Fairy's Thought: cliff path","B","","Zora River.",""],
+["fth_5","fth","ft","Fairy's Thought: blue hall on 3F","A","","Forest Temple.",""],
+["fth_6","fth","ic","Fairy's Thought: late corridor","A","","Ice Cavern.",""],
+["fth_7","fth","wt","Fairy's Thought: dark brick room on 3F","A","","Water Temple.",""],
+["fth_8","fth","hf","Fairy's Thought: beside a tree (Business Scrub password)","A","","Hyrule Field. Read it as an adult for the password used by child Link (Heart Piece #34).",""],
+["fth_9","fth","hf","Fairy's Thought: red-rock canyon","A","","Hyrule Field, beside the canyon chest. Read it as an adult to undo the lock for child Link (Heart Piece #35).",""],
+["fth_10","fth","hf","Fairy's Thought: rock nook in the northwest by the river","B","","Hyrule Field.",""],
+["fth_11","fth","gy","Fairy's Thought: Royal Family's Tomb, poison room","B","","Graveyard.","Zelda's Lullaby"],
+["fth_12","fth","fit","Fairy's Thought: 5F path right of the Megaton Hammer chest","A","","Fire Temple.",""],
+["fth_13","fth","st","Fairy's Thought: barred hall","A","","Shadow Temple.",""],
+["fth_14","fth","hf","Fairy's Thought: ruined stone pillar on the south edge by the pond","B","","Hyrule Field.",""],
+["fth_15","fth","hf","Fairy's Thought: rocks on the moat bank west of the drawbridge","B","","Hyrule Field.",""],
+["fth_16","fth","hf","Fairy's Thought: rock nook south of the Zora River entrance","B","","Hyrule Field.",""],
+["fth_17","fth","llr","Fairy's Thought: ruins by the southwest fence","B","","Lon Lon Ranch, reached from outside the ranch.",""],
+["fth_18","fth","hf","Fairy's Thought: Gossip Stone grotto by the pond southeast of the ranch","B","","Hyrule Field, in the bushes.",""],
+["fth_19","fth","llr","Fairy's Thought: ivy-covered wall by the cart behind the house","B","","Lon Lon Ranch.",""],
+["fth_20","fth","gy","Fairy's Thought: broken stones at the Royal Family's Tomb entrance","B","","Graveyard.",""],
+["fth_21","fth","lh","Fairy's Thought: pot alcove on the west shore near the south end","B","","Lake Hylia.",""],
+["fth_22","fth","botw","Fairy's Thought: coffin in the Gibdo room","C","","Bottom of the Well.",""],
+["fth_23","fth","col","Fairy's Thought: Spirit Temple ledge by the Silver Gauntlets chest","B","","Evil Desert Colossus.",""],
+// ===== GOSSIP STONES (40) — optional; talk with the Mask of Truth =====
+["gst_1","gst","kf","Gossip Stone: beside the grotto with three Deku Scrubs","B","","","","opt"],
+["gst_2","gst","kf","Gossip Stone: Great Deku Tree clearing, first stone","B","","","","opt"],
+["gst_3","gst","kf","Gossip Stone: Great Deku Tree clearing, second stone","B","","","","opt"],
+["gst_4","gst","lw","Gossip Stone: bridge clearing with the Deku-Stick Bag scrub","B","","","","opt"],
+["gst_5","gst","sfm","Gossip Stone: grotto behind the Song of Time block","B","","","Song of Time","opt"],
+["gst_6","gst","sfm","Gossip Stone: by the warp pad near the Forest Temple","B","","","","opt"],
+["gst_7","gst","sfm","Gossip Stone: in the maze by the fairy fountain grotto","B","","","","opt"],
+["gst_8","gst","sfm","Gossip Stone: near the entrance, by the Wolfos grotto","B","","","","opt"],
+["gst_9","gst","hf","Gossip Stone: cow grotto near the Gerudo Valley entrance","B","","","","opt"],
+["gst_10","gst","hf","Gossip Stone: Gold Skulltula grotto in the south of the field","B","","","Bombs","opt"],
+["gst_11","gst","hf","Gossip Stone: rupee grotto near the Zora River entrance","B","","","","opt"],
+["gst_12","gst","hc","Gossip Stone: by the castle road where Malon waits","B","","","","opt"],
+["gst_13","gst","hc","Gossip Stone: in the garden near the palm tree","C","","","","opt"],
+["gst_14","gst","hc","Gossip Stone: inside the Song of Storms grotto","C","","","Song of Storms, Bombs","opt"],
+["gst_15","gst","mk","Gossip Stone: first stone before the Temple of Time","B","","","","opt"],
+["gst_16","gst","mk","Gossip Stone: second stone before the Temple of Time","B","","","","opt"],
+["gst_17","gst","mk","Gossip Stone: third stone before the Temple of Time","B","","","","opt"],
+["gst_18","gst","mk","Gossip Stone: fourth stone before the Temple of Time","B","","","","opt"],
+["gst_19","gst","kak","Gossip Stone: grotto near the gate to the Graveyard","B","","","","opt"],
+["gst_20","gst","kak","Gossip Stone: grotto with a Blue Rupee chest behind the Potion Shop","B","","","","opt"],
+["gst_21","gst","gy","Gossip Stone: by the Shadow Temple entrance and warp pad","B","","","","opt"],
+["gst_22","gst","dmt","Gossip Stone: high on the trail near the crater entrance","B","","","","opt"],
+["gst_23","gst","dmt","Gossip Stone: inside the hidden cow grotto","B","","","Bombs","opt"],
+["gst_24","gst","gc","Gossip Stone: beside Medigoron's shop","B","","","","opt"],
+["gst_25","gst","gc","Gossip Stone: by the small chests near the boulder cave","B","","","","opt"],
+["gst_26","gst","dmc","Gossip Stone: hammer cave, by a cracked wall","A","","","Megaton Hammer","opt"],
+["gst_27","gst","dmc","Gossip Stone: hammer cave, beside the seed chest","A","","","Megaton Hammer","opt"],
+["gst_28","gst","zr","Gossip Stone: midway along the river by the Cucco islets","B","","","","opt"],
+["gst_29","gst","zr","Gossip Stone: by the Sleepless Waterfall near the Lost Woods shortcut","B","","","","opt"],
+["gst_30","gst","zr","Gossip Stone: in the seed chest cave between the blue pillars","B","","","","opt"],
+["gst_31","gst","zr","Gossip Stone: in a grotto near the soft soil","B","","","","opt"],
+["gst_32","gst","zd","Gossip Stone: in the throne room near King Zora","B","","","","opt"],
+["gst_33","gst","zf","Gossip Stone: on the shore near Lord Jabu-Jabu","B","","","","opt"],
+["gst_34","gst","zf","Gossip Stone: by the Great Fairy's Fountain","B","","","Bombs","opt"],
+["gst_35","gst","lh","Gossip Stone: near the warp pad and stone tablet","B","","","","opt"],
+["gst_36","gst","lh","Gossip Stone: on the south shore","B","","","","opt"],
+["gst_37","gst","lh","Gossip Stone: on the west shore","B","","","","opt"],
+["gst_38","gst","gv","Gossip Stone: down in the canyon by the river","B","","","","opt"],
+["gst_39","gst","col","Gossip Stone: in front of the Spirit Temple entrance","B","","","","opt"],
+["gst_40","gst","dc","Gossip Stone: inside the cavern","B","","","","opt"],
+// ===== COWS (9) — optional; Epona's Song for Lon Lon Milk =====
+["cow_1","cow","llr","Cow: stable, first cow","B","","","Epona's Song","opt"],
+["cow_2","cow","llr","Cow: stable, second cow (child)","C","","","Epona's Song","opt"],
+["cow_3","cow","llr","Cow: stable, second cow (adult)","A","","","Epona's Song","opt"],
+["cow_4","cow","kak","Cow: Kakariko cow barn","B","","","Epona's Song","opt"],
+["cow_5","cow","dmt","Cow: Death Mountain Trail grotto","B","","","Epona's Song, Bombs","opt"],
+["cow_6","cow","hf","Cow: Hyrule Field grotto","B","","","Epona's Song","opt"],
+["cow_7","cow","gv","Cow: Gerudo Valley pasture","B","","Miss Moo by the tents.","Epona's Song","opt"],
+["cow_8","cow","gf","Cow: Gerudo Fortress","A","","","Epona's Song","opt"],
+["cow_9","cow","kf","Cow: Link's House","A","","Delivered after the obstacle course under 0:40.","Epona's Song, Epona","opt"]
+];
+
+// ---- Requirement parsing: maps free-text "Needs" into tracked entry ids (Switch 2 remake rules) ----
+// Entry requirement to ENTER an area (inherited by every entry in it)
+const AREA_REQ = {
+  dt:"Kokiri Sword, Deku Shield", dc:"Goron Bracelet", jj:"Bottle", zd:"Zelda's Lullaby",
+  ft:"Hookshot", fit:"Goron Tunic", wt:"Iron Boots, Hookshot",
+  st:"Nocturne of Shadow, Din's Fire", botw:"Song of Storms",
+  gf:"Epona or Longshot", gtg:"Gerudo Pass", hw:"Gerudo Pass; Hover Boots or Longshot",
+  col:"Requiem of Spirit or Hover Boots or Longshot", spt:"Requiem of Spirit or Hover Boots or Longshot",
+  ogc:"Light Arrows", hof:"Forest Medallion"
+};
+const ANY_BOTTLE = ["bt_1","bt_2","bt_3","bt_4","bt_5"];
+const FIVE_MED = ["qi_fm","qi_fim","qi_wm","qi_sm","qi_spm"];
+// keyword -> id | [ids] (all) | {any:[ids]}
+const REQ_MAP = {
+  "hookshot":"it_hook","longshot":"it_long","boomerang":"it_boom","bombs":"it_bomb","bomb bag":"it_bomb","slingshot":"it_sling","fairy slingshot":"it_sling",
+  "megaton hammer":"it_ham","hammer":"it_ham","lens of truth":"it_lens","lenses of truth":"it_lens","iron boots":"eq_ib","hover boots":"eq_hb",
+  "silver gauntlets":"it_sg","golden gauntlets":"it_gg","golden scale":"it_gsc","silver scale":"it_ss","goron bracelet":"it_gb","goron's bracelet":"it_gb",
+  "bow":"it_bow","fairy bow":"it_bow","fire arrow":"it_fa","fire arrows":"it_fa","light arrow":"it_la","light arrows":"it_la","ice arrow":"it_ia",
+  "din's fire":"gfy_din","farore's wind":"gfy_far","nayru's love":"gfy_nay","double magic":"gfy_dm",
+  "master sword":"eq_ms","mirror shield":"eq_mr","kokiri sword":"eq_ks","deku shield":"eq_ds","hylian shield":"eq_hs",
+  "goron tunic":"eq_gt","zora tunic":"eq_zt","deku stick":"it_stick","deku sticks":"it_stick","magic beans":"it_bean","echo gem":"it_echo","bombchus":"it_chu",
+  "song of storms":"sg_st","saria's song":"sg_sa","sun's song":"sg_su","zelda's lullaby":"sg_zl","song of time":"sg_ti",
+  "epona's song":"sg_ep","scarecrow's song":"sg_sc","scarecrow song":"sg_sc","nocturne of shadow":"sg_no","requiem of spirit":"sg_re","bolero of fire":"sg_bo",
+  "serenade of water":"sg_se","minuet of the forest":"sg_mi","prelude of light":"sg_pr",
+  "ocarina":"it_foc","fairy ocarina":"it_foc","ocarina of time":"it_oot",
+  "six songs":["sg_zl","sg_sa","sg_ep","sg_su","sg_ti","sg_st"],"songs":["sg_zl","sg_sa","sg_ep","sg_su","sg_ti"],
+  "epona":"sq_epona","gerudo pass":"qi_gc","gerudo membership card":"qi_gc",
+  "3 spiritual stones":["qi_ke","qi_gr","qi_zs"],"three spiritual stones":["qi_ke","qi_gr","qi_zs"],
+  "forest medallion":"qi_fm","fire medallion":"qi_fim","water medallion":"qi_wm","shadow medallion":"qi_sm","spirit medallion":"qi_spm","light medallion":"qi_lm",
+  "forest + fire + water medallions":["qi_fm","qi_fim","qi_wm"],"shadow + spirit medallions":["qi_sm","qi_spm"],"five medallions":FIVE_MED,
+  "defeat ganon":"ds_gan",
+  "bottle":{any:ANY_BOTTLE},"bug in a bottle":{any:ANY_BOTTLE},"bottle with bugs":{any:ANY_BOTTLE},"bottle with blue fire":{any:ANY_BOTTLE},"blue fire":{any:ANY_BOTTLE},
+  "fire source":{any:["it_stick","gfy_din","it_fa"]},
+  "weird egg":"mk_egg","zelda's letter":"mk_zl","keaton mask returned":"mk_ke","skull mask returned":"mk_sk","spooky mask returned":"mk_sp",
+  "four masks sold":["mk_ke","mk_sk","mk_sp","mk_bh"],"skull mask":"mk_ke","mask of truth":"mk_mt",
+  "pocket egg":"tr_1","pocket cucco":"tr_2","cojiro":"tr_3","odd mushroom":"tr_4","odd poultice":"tr_5","odd potion":"tr_5","poacher's saw":"tr_6",
+  "broken goron sword":"tr_7","broken goron's sword":"tr_7","prescription":"tr_8","eyeball frog":"tr_9","specialty eye drops":"tr_10","eye drops":"tr_10","biggoron receipt":"tr_11","claim check":"tr_11",
+  "dampé race exit":"it_hook","dampe race exit":"it_hook"
+};
+// Things that are always available / not tracked (shown as neutral pills)
+const REQ_IGNORE = /^(cucco|sword|dive|sinking lure|king zora thawed|fairy's thought read as adult|none|\d+(-\d+)? rupees)$/;
+const BEAN_SPOT_BY_AREA = {kf:"bn_kf",lw:"bn_lw2",gy:"bn_gy",dmt:"bn_dmt",dmc:"bn_dmc",zr:"bn_zr",lh:"bn_lh",gv:"bn_gv",col:"bn_col"};
+
+function normTok(t){return t.replace(/\([^)]*\)/g,"").replace(/\s+/g," ").trim().toLowerCase()}
+function cleanLabel(raw){return raw.replace(/\s*\(.*?\)\s*/g," ").trim()}
+// Parse "A; B or C, D" -> clauses(AND) of alternatives(OR) of tokens(AND)
+function parseReqString(str, entry){
+  const clauses=[];
+  for(const clause of (str||"").split(";")){
+    if(!clause.trim())continue;
+    const alts=[];
+    for(const alt of clause.split(/,?\s+or\s+|\s*\/\s*/)){
+      if(!alt.trim())continue;
+      const key=normTok(alt);
+      let parts=REQ_MAP[key]!==undefined?[alt]:alt.split(/\s*[,+]\s*|\s+and\s+/);
+      const toks=[];
+      for(const p of parts){
+        const raw=p.trim();if(!raw)continue;
+        const k=normTok(raw);
+        let m=REQ_MAP[k];
+        if(k==="magic bean"||k==="magic bean planted")m=(entry&&entry.cat==="bn")?"it_bean":(entry&&BEAN_SPOT_BY_AREA[entry.area])||"it_bean";
+        let cm=k.match(/^(\d+) gold skulltula tokens?$/);if(cm)m={count:"gs",n:+cm[1]};
+        cm=k.match(/^(\d+) big poes?$/);if(cm)m={count:"bp",n:+cm[1]};
+        if(m===undefined){toks.push({label:cleanLabel(raw),ids:[],neutral:true,known:REQ_IGNORE.test(k)});continue}
+        if(typeof m==="string")m=[m];
+        if(Array.isArray(m))toks.push({label:cleanLabel(raw),ids:m});
+        else if(m.any)toks.push({label:cleanLabel(raw),any:m.any});
+        else toks.push({label:cleanLabel(raw),count:m.count,n:m.n});
+      }
+      if(toks.length)alts.push(toks);
+    }
+    if(alts.length)clauses.push(alts);
+  }
+  return clauses;
+}
+// Full requirement set for an entry: implicit age gate + area entry + own needs
+function requirementsFor(entry){
+  const out=[];
+  if(entry.age==="A"&&entry.id!=="eq_hcl"&&entry.id!=="qi_lm")out.push({src:"age",clauses:[[[{label:"Adult Link (Master Sword)",ids:["eq_ms"]}]]]});
+  if(AREA_REQ[entry.area])out.push({src:"area",clauses:parseReqString(AREA_REQ[entry.area],entry)});
+  if(entry.req)out.push({src:"own",clauses:parseReqString(entry.req,entry)});
+  return out;
+}
+// counts = {gs: tokens checked, bp: Big Poes checked}
+function tokenMet(tok,done,counts){
+  if(tok.neutral)return true;
+  if(tok.count)return (counts[tok.count]||0)>=tok.n;
+  if(tok.any)return tok.any.some(id=>done[id]);
+  return tok.ids.every(id=>done[id]);
+}
+function clauseMet(alts,done,counts){return alts.some(toks=>toks.every(t=>tokenMet(t,done,counts)))}
+function entryLocked(entry,done,counts){
+  for(const r of requirementsFor(entry))for(const c of r.clauses)if(!clauseMet(c,done,counts))return true;
+  return false;
+}
+
+(function(){
+"use strict";
+const KEY="oot100.s2.v1";
+const AREA=Object.fromEntries(AREAS.map(a=>[a[0],{label:a[1],region:a[2]}]));
+const CAT=Object.fromEntries(CATS.map(c=>[c[0],{label:c[1],color:c[2]}]));
+const AREA_ORDER=Object.fromEntries(AREAS.map((a,i)=>[a[0],i]));
+const CAT_ORDER=Object.fromEntries(CATS.map((c,i)=>[c[0],i]));
+const REGIONS=[...new Set(AREAS.map(a=>a[2]))];
+const items=ITEMS.map((r,i)=>({id:r[0],cat:r[1],area:r[2],name:r[3],age:r[4],time:r[5],desc:r[6],req:r[7]||"",opt:!!r[8],idx:i}));
+const byId=Object.fromEntries(items.map(i=>[i.id,i]));
+
+// ---------- requirements (see req.js) ----------
+const REQS=Object.fromEntries(items.map(i=>[i.id,requirementsFor(i)]));
+const DEPS={},COUNT_DEPS={gs:[],bp:[]};
+for(const i of items){const cs=new Set();for(const r of REQS[i.id])for(const c of r.clauses)for(const alts of c)for(const t of alts){if(t.count)cs.add(t.count);for(const id of (t.ids||t.any||[])){(DEPS[id]=DEPS[id]||[]).push(i.id)}}for(const c of cs)COUNT_DEPS[c].push(i.id)}
+function counts(){const c={gs:0,bp:0};for(const i of items)if(state.done[i.id]&&c[i.cat]!=null)c[i.cat]++;return c}
+function isLocked(i,cn){for(const r of REQS[i.id])for(const c of r.clauses)if(!clauseMet(c,state.done,cn))return true;return false}
+function lockedSet(){const cn=counts();const s=new Set();for(const i of items)if(!state.done[i.id]&&isLocked(i,cn))s.add(i.id);return s}
+
+// ---------- state ----------
+let state=load();
+function DEFAULTS(){return {done:{},cats:[],q:"",region:"",area:"",age:"",time:"",status:"",avail:"",sort:"game",group:"area",opt:false,compact:false,collapsed:{},ctlHidden:false,banner:true}}
+function load(){try{const s=JSON.parse(localStorage.getItem(KEY)||"{}");return Object.assign(DEFAULTS(),s)}catch(e){return DEFAULTS()}}
+function save(){state.updated=Date.now();localStorage.setItem(KEY,JSON.stringify(state))}
+
+// ---------- DOM ----------
+const $=s=>document.querySelector(s);
+const el=(t,a,...kids)=>{const e=document.createElement(t);if(a)for(const k in a){if(k==="class")e.className=a[k];else if(k==="style")e.style.cssText=a[k];else if(k.startsWith("on"))e.addEventListener(k.slice(2),a[k]);else if(k==="html")e.innerHTML=a[k];else e.setAttribute(k,a[k])}for(const k of kids){if(k==null)continue;e.append(k.nodeType?k:document.createTextNode(k))}return e};
+
+// populate selects
+const regSel=$("#region"),areaSel=$("#area");
+for(const r of REGIONS)regSel.append(el("option",{value:r},r));
+function fillAreas(){areaSel.innerHTML="";areaSel.append(el("option",{value:""},"All areas"));let g=null,og=null;for(const a of AREAS){if(!state.region||a[2]===state.region){if(a[2]!==g){g=a[2];og=el("optgroup",{label:g});areaSel.append(og)}og.append(el("option",{value:a[0]},a[1]))}}areaSel.value=state.area}
+fillAreas();
+
+// ---------- filtering ----------
+function total(){return items.filter(i=>state.opt||!i.opt)}
+function visible(){
+  const q=state.q.trim().toLowerCase(),gc=counts();
+  return total().filter(i=>{
+    if(state.avail){if(state.done[i.id])return false;const L=isLocked(i,gc);if(state.avail==="open"?L:!L)return false}
+    if(state.cats.length&&!state.cats.includes(i.cat))return false;
+    if(state.region&&AREA[i.area].region!==state.region)return false;
+    if(state.area&&i.area!==state.area)return false;
+    if(state.age&&i.age!==state.age)return false;
+    if(state.time){if(state.time==="X"){if(i.time)return false}else if(i.time!==state.time)return false}
+    if(state.status==="todo"&&state.done[i.id])return false;
+    if(state.status==="done"&&!state.done[i.id])return false;
+    if(q){const hay=(i.name+" "+i.desc+" "+i.req+" "+AREA[i.area].label+" "+CAT[i.cat].label).toLowerCase();if(!q.split(/\s+/).every(w=>hay.includes(w)))return false}
+    return true;
+  });
+}
+const sorters={
+  game:(a,b)=>a.idx-b.idx,
+  area:(a,b)=>AREA_ORDER[a.area]-AREA_ORDER[b.area]||CAT_ORDER[a.cat]-CAT_ORDER[b.cat]||a.idx-b.idx,
+  cat:(a,b)=>CAT_ORDER[a.cat]-CAT_ORDER[b.cat]||AREA_ORDER[a.area]-AREA_ORDER[b.area]||a.idx-b.idx,
+  name:(a,b)=>a.name.localeCompare(b.name)||a.idx-b.idx,
+  age:(a,b)=>"CBA".indexOf(a.age)-"CBA".indexOf(b.age)||a.idx-b.idx,
+  todo:(a,b)=>(state.done[a.id]?1:0)-(state.done[b.id]?1:0)||a.idx-b.idx
+};
+function groupKey(i){return state.group==="area"?i.area:state.group==="region"?AREA[i.area].region:state.group==="cat"?i.cat:"all"}
+function groupLabel(k){return state.group==="area"?AREA[k].label:state.group==="cat"?CAT[k].label:state.group==="region"?k:"All entries"}
+function groupOrder(k){return state.group==="area"?AREA_ORDER[k]:state.group==="cat"?CAT_ORDER[k]:state.group==="region"?REGIONS.indexOf(k):0}
+
+// ---------- render ----------
+function render(){
+  renderHeader();renderSummary();renderControls();renderList();
+}
+function renderHeader(){
+  const all=total(),done=all.filter(i=>state.done[i.id]).length,pct=all.length?Math.round(done/all.length*1000)/10:0;
+  $("#pbar").style.width=pct+"%";$("#ppct").textContent=pct+"%";
+  const gs=items.filter(i=>i.cat==="gs"&&state.done[i.id]).length,hp=items.filter(i=>i.cat==="hp"&&state.done[i.id]).length,hc=items.filter(i=>i.cat==="hc"&&state.done[i.id]).length;
+  const hearts=3+hc+Math.floor(hp/4);
+  $("#psub").textContent=`${done} / ${all.length} complete  ·  ${gs}/100 Skulltulas  ·  ${hp}/36 Heart Pieces  ·  ${hearts}/20 hearts${pct===100?"  ·  100% COMPLETE!":""}`;
+  document.body.classList.toggle("compact",state.compact);
+  document.body.classList.toggle("ctl-hidden",state.ctlHidden);
+  document.body.classList.toggle("nobanner",!state.banner);
+}
+function renderSummary(){
+  const s=$("#summary");s.innerHTML="";
+  for(const c of CATS){
+    const all=items.filter(i=>i.cat===c[0]&&(state.opt||!i.opt));if(!all.length)continue;
+    const d=all.filter(i=>state.done[i.id]).length;
+    const card=el("button",{class:"sumcard"+(state.cats.includes(c[0])?" active":"")+(d===all.length?" done":""),onclick:()=>{const k=c[0];state.cats=state.cats.includes(k)?state.cats.filter(x=>x!==k):[...state.cats,k];save();render()}},
+      el("div",{class:"lbl"},el("i",{class:"dot",style:"background:"+c[2]}),c[1]),
+      el("div",{class:"num"},String(d),el("small"," / "+all.length)),
+      el("i",{class:"mini",style:"width:"+(d/all.length*100)+"%;--c:"+c[2]}));
+    s.append(card);
+  }
+}
+function renderControls(){
+  $("#q").value=state.q;regSel.value=state.region;fillAreas();
+  for(const id of["age","time","status","avail"])for(const b of $("#"+id).children)b.classList.toggle("on",b.dataset.v===state[id]);
+  $("#sort").value=state.sort;$("#group").value=state.group;$("#opt").checked=state.opt;$("#compact").checked=state.compact;
+}
+function renderList(){
+  const list=$("#list");list.innerHTML="";
+  const vis=visible().sort(sorters[state.sort]||sorters.game);
+  if(!vis.length){list.append(el("div",{class:"empty"},"Nothing matches these filters."));return}
+  const groups=new Map();
+  for(const i of vis){const k=groupKey(i);if(!groups.has(k))groups.set(k,[]);groups.get(k).push(i)}
+  const keys=[...groups.keys()];
+  if(state.sort==="game"||state.sort==="area"||state.sort==="cat"||state.group!=="none")keys.sort((a,b)=>groupOrder(a)-groupOrder(b));
+  for(const k of keys){
+    const arr=groups.get(k);
+    const totalG=total().filter(i=>groupKey(i)===k).length,doneG=total().filter(i=>groupKey(i)===k&&state.done[i.id]).length;
+    const g=el("div",{class:"group"+(state.collapsed[state.group+":"+k]?" collapsed":"")});
+    const head=el("div",{class:"ghead",onclick:()=>{const kk=state.group+":"+k;state.collapsed[kk]=!state.collapsed[kk];save();g.classList.toggle("collapsed")}},
+      el("span",{class:"caret"},"▾"),el("h2",null,groupLabel(k)),
+      el("span",{class:"gcount"},`${doneG}/${totalG}`+(arr.length!==totalG?` (${arr.length} shown)`:"")),
+      el("span",{class:"gbar"},el("i",{style:"width:"+(totalG?doneG/totalG*100:0)+"%"})),
+      state.group==="area"&&AREA_REQ[k]?areaReqPills(k):null);
+    const wrap=el("div",{class:"items"});
+    for(const i of arr)wrap.append(renderItem(i));
+    g.append(head,wrap);list.append(g);
+  }
+}
+function renderItem(i){
+  const done=!!state.done[i.id];
+  const box=el("input",{type:"checkbox",class:"box","aria-label":i.name});box.checked=done;
+  box.addEventListener("change",()=>{const before=lockedSet();if(box.checked)state.done[i.id]=1;else delete state.done[i.id];save();row.classList.toggle("done",box.checked);renderHeader();renderSummary();updateGroupHead(row);afterToggle(i,before)});
+  const gc=counts(),locked=!done&&isLocked(i,gc),hasReq=REQS[i.id].length>0;
+  const head=el("div",{class:"head"},
+    el("span",{class:"name"},i.name),
+    !done&&hasReq?el("span",{class:"tag "+(locked?"lock":"open"),title:locked?"You have not checked off something this needs":"Everything this needs is checked off"},locked?"\uD83D\uDD12 Locked":"\u2713 Available"):null,
+    el("span",{class:"tag cat",style:"background:"+CAT[i.cat].color},CAT[i.cat].label),
+    state.group!=="area"?el("span",{class:"tag"},AREA[i.area].label):null,
+    el("span",{class:"tag "+(i.age==="C"?"child":i.age==="A"?"adult":"either")},i.age==="C"?"Child":i.age==="A"?"Adult":"Either age"),
+    i.time?el("span",{class:"tag "+(i.time==="N"?"night":"day")},i.time==="N"?"Night":"Day"):null,
+    i.opt?el("span",{class:"tag opt"},"Optional"):null);
+  const row=el("div",{class:"item"+(done?" done":"")+(locked?" locked":""),"data-id":i.id},box,head,
+    i.desc?el("div",{class:"desc"},i.desc):null,
+    hasReq?reqRow(i,gc):null);
+  return row;
+}
+// Requirement pills for one entry: [To enter: A or B] [Adult] [own needs...]
+function reqRow(i,gc){
+  const row=el("div",{class:"reqs"},el("b",{class:"sep"},"Needs:"));
+  const seen=new Set();
+  for(const r of REQS[i.id]){
+    const clauses=r.src==="own"?r.clauses.filter(alts=>!(alts.length===1&&alts[0].every(t=>seen.has(t.label)))):r.clauses;
+    if(!clauses.length)continue;
+    for(const alts of clauses)for(const toks of alts)for(const t of toks)seen.add(t.label);
+    if(r.src==="area")row.append(el("span",{class:"sep"},"to enter "+AREA[i.area].label+":"));
+    clauses.forEach((alts,ci)=>{
+      if(ci)row.append(el("span",{class:"sep"},"+"));
+      alts.forEach((toks,ai)=>{if(ai)row.append(el("span",{class:"sep"},"or"));for(const t of toks)row.append(pill(t,gc))});
+    });
+    if(r.src!=="own")row.append(el("span",{class:"sep"},"\u00b7"));
+  }
+  if(row.lastChild&&row.lastChild.textContent==="\u00b7")row.lastChild.remove();
+  const notes=(i.req.match(/\(([^)]*)\)/g)||[]).map(s=>s.slice(1,-1)).join("; ");
+  if(notes)row.append(el("span",{class:"sep note"},"("+notes+")"));
+  return row;
+}
+function areaReqPills(k){
+  const gc=counts(),wrap=el("span",{class:"areq",onclick:e=>e.stopPropagation()},el("span",{class:"sep"},"To enter:"));
+  parseReqString(AREA_REQ[k],{area:k}).forEach((alts,ci)=>{if(ci)wrap.append(el("span",{class:"sep"},"+"));alts.forEach((toks,ai)=>{if(ai)wrap.append(el("span",{class:"sep"},"or"));for(const t of toks)wrap.append(pill(t,gc))})});
+  return wrap;
+}
+function pill(t,gc){
+  if(t.neutral)return el("span",{class:"pill neutral",title:"Always available / not tracked"},t.label);
+  const met=tokenMet(t,state.done,gc);
+  const label=t.count?`${t.label} (${Math.min(gc[t.count],t.n)}/${t.n})`:t.label;
+  const p=el("span",{class:"pill "+(met?"have":"need"),title:met?"Checked off":"Not checked off yet. Tap to jump to where you get it."},el("span",{class:"ic"},met?"\u2713":"\uD83D\uDD12"),label);
+  if(!met)p.addEventListener("click",e=>{e.stopPropagation();locate(t)});
+  return p;
+}
+// Jump to the entry that provides a requirement
+function locate(t){
+  if(t.count){const cn=counts();toast(t.count==="gs"?`Gold Skulltula tokens: ${cn.gs}/${t.n}. Tap the Gold Skulltula card to list them.`:`Big Poes sold: ${cn.bp}/${t.n}. Tap the Big Poe card to list them.`);return}
+  const ids=t.any||t.ids;const id=ids.find(x=>!state.done[x])||ids[0];const target=byId[id];if(!target)return;
+  let row=document.querySelector(`.item[data-id="${id}"]`);
+  if(!row){Object.assign(state,{cats:[],q:"",region:"",area:"",age:"",time:"",status:"",avail:""});if(!state.opt&&target.opt)state.opt=true;save();render();row=document.querySelector(`.item[data-id="${id}"]`);toast(`Filters cleared to show: ${target.name}`)}
+  else toast(`${target.name} \u00b7 ${AREA[target.area].label}`);
+  if(!row)return;
+  const g=row.closest(".group");if(g&&g.classList.contains("collapsed")){g.classList.remove("collapsed");state.collapsed[state.group+":"+groupKey(target)]=false;save()}
+  row.scrollIntoView({behavior:"smooth",block:"center"});row.classList.remove("flash");void row.offsetWidth;row.classList.add("flash");
+}
+// After a checkbox change: refresh rows whose requirements reference this entry, report unlocks
+function afterToggle(i,before){
+  const after=lockedSet();const unlocked=[...before].filter(id=>!after.has(id)&&id!==i.id),relocked=[...after].filter(id=>!before.has(id)&&id!==i.id);
+  if(state.avail){renderList();}
+  else{const touched=new Set([...(DEPS[i.id]||[]),...(COUNT_DEPS[i.cat]||[]),...unlocked,...relocked]);
+    for(const id of touched){const old=document.querySelector(`.item[data-id="${id}"]`);if(old)old.replaceWith(renderItem(byId[id]))}}
+  if(unlocked.length)toast(`Unlocked ${unlocked.length} entr${unlocked.length===1?"y":"ies"}${unlocked.length<=3?": "+unlocked.map(id=>byId[id].name).join(", "):""}`);
+  else if(relocked.length)toast(`${relocked.length} entr${relocked.length===1?"y is":"ies are"} locked again`);
+}
+function openLegend(){
+  const dlg=$("#dlg");dlg.innerHTML="";
+  const L=(cls,ic,txt)=>el("span",{class:"pill "+cls},ic?el("span",{class:"ic"},ic):null,txt);
+  dlg.append(el("h3",null,"Requirement notices"),
+    el("p",null,"Every entry that needs something to reach or obtain shows a Needs row. Lock status is computed only from what you have checked off in this tracker, so check off items, songs and upgrades as you get them."),
+    el("div",{class:"dlgrow",style:"align-items:center"},L("need","\uD83D\uDD12","Hookshot"),el("span",null,"You have not checked this off. The entry is Locked. Tap the pill to jump to where you get it.")),
+    el("div",{class:"dlgrow",style:"align-items:center"},L("have","\u2713","Hookshot"),el("span",null,"Checked off; this requirement is satisfied.")),
+    el("div",{class:"dlgrow",style:"align-items:center"},L("neutral","","Cucco"),el("span",null,"Always obtainable in the game; not tracked.")),
+    el("div",{class:"dlgrow",style:"align-items:center"},el("span",{class:"tag lock"},"\uD83D\uDD12 Locked"),el("span",{class:"tag open"},"\u2713 Available"),el("span",null,"Entry status. Entries with no requirements show neither.")),
+    el("p",{style:"margin-top:12px"},el("b",null,"To enter"),": requirements for a whole area (shown on the area header and inherited by each entry). ",el("b",null,"Adult Link (Master Sword)"),": adult-only entries are locked until the Master Sword is checked off. ",el("b",null,"or"),": any one alternative is enough. ",el("b",null,"+"),": all parts are needed."),
+    el("p",null,"Use the ",el("b",null,"Availability"),' filter ("Available now" / "Locked") to plan what you can do next. Checking something off that unlocks other entries shows a toast with the count.'),
+    el("div",{class:"dlgrow"},
+      state.banner?null:el("button",{class:"btn",onclick:()=>{state.banner=true;save();renderHeader();dlg.close()}},"Show the top notice again"),
+      el("button",{class:"btn primary",style:"margin-left:auto",onclick:()=>dlg.close()},"Close")));
+  dlg.showModal();
+}
+function updateGroupHead(row){
+  const g=row.closest(".group");if(!g)return;const items_=[...g.querySelectorAll(".item")];
+  const k=groupKey(byId[row.dataset.id]);
+  const totalG=total().filter(i=>groupKey(i)===k).length,doneG=total().filter(i=>groupKey(i)===k&&state.done[i.id]).length;
+  g.querySelector(".gcount").textContent=`${doneG}/${totalG}`+(items_.length!==totalG?` (${items_.length} shown)`:"");
+  g.querySelector(".gbar i").style.width=(totalG?doneG/totalG*100:0)+"%";
+}
+
+// ---------- events ----------
+$("#q").addEventListener("input",e=>{state.q=e.target.value;save();renderList()});
+regSel.addEventListener("change",e=>{state.region=e.target.value;if(state.area&&AREA[state.area].region!==state.region&&state.region)state.area="";save();render()});
+areaSel.addEventListener("change",e=>{state.area=e.target.value;save();render()});
+for(const id of["age","time","status","avail"])$("#"+id).addEventListener("click",e=>{const b=e.target.closest("button");if(!b)return;state[id]=b.dataset.v;save();render()});
+$("#sort").addEventListener("change",e=>{state.sort=e.target.value;save();renderList()});
+$("#group").addEventListener("change",e=>{state.group=e.target.value;save();renderList()});
+$("#opt").addEventListener("change",e=>{state.opt=e.target.checked;save();render()});
+$("#compact").addEventListener("change",e=>{state.compact=e.target.checked;save();renderHeader()});
+$("#clear").addEventListener("click",()=>{Object.assign(state,{cats:[],q:"",region:"",area:"",age:"",time:"",status:"",avail:""});save();render()});
+$("#banner-x").addEventListener("click",()=>{state.banner=false;save();renderHeader();toast("Notice hidden. Use ? Legend to bring it back.")});
+$("#btn-legend").addEventListener("click",openLegend);
+$("#togglectl").addEventListener("click",()=>{state.ctlHidden=!state.ctlHidden;save();renderHeader()});
+$("#btn-expand").addEventListener("click",e=>{const anyOpen=[...document.querySelectorAll(".group")].some(g=>!g.classList.contains("collapsed"));for(const g of document.querySelectorAll(".group")){const k=state.group+":"+groupKeyOfGroup(g);state.collapsed[k]=anyOpen;g.classList.toggle("collapsed",anyOpen)}save();e.target.textContent=anyOpen?"Expand all":"Collapse all"});
+function groupKeyOfGroup(g){const first=g.querySelector(".item");return first?groupKey(byId[first.dataset.id]):""}
+$("#btn-reset").addEventListener("click",()=>{if(confirm("Clear ALL progress? This cannot be undone (export a backup first if unsure)."))if(confirm("Really reset everything?")){state.done={};save();render();toast("Progress cleared")}});
+
+// ---------- sync / backup ----------
+const B64="ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789-_";
+function encode(){const bytes=new Uint8Array(Math.ceil(items.length/8));items.forEach((i,n)=>{if(state.done[i.id])bytes[n>>3]|=1<<(n&7)});let s="";for(let n=0;n<bytes.length;n+=3){const a=bytes[n],b=bytes[n+1]||0,c=bytes[n+2]||0;s+=B64[a>>2]+B64[((a&3)<<4)|(b>>4)]+(n+1<bytes.length?B64[((b&15)<<2)|(c>>6)]:"")+(n+2<bytes.length?B64[c&63]:"")}return "OOTS2-"+s}
+function decode(code){code=(code||"").trim();if(!code.startsWith("OOTS2-"))throw new Error("Not a valid code (should start with OOTS2-)");const s=code.slice(5);const bytes=[];for(let n=0;n<s.length;n+=4){const v=[...s.slice(n,n+4)].map(ch=>{const x=B64.indexOf(ch);if(x<0)throw new Error("Bad character in code");return x});bytes.push((v[0]<<2)|(v[1]>>4));if(v.length>2)bytes.push(((v[1]&15)<<4)|(v[2]>>2));if(v.length>3)bytes.push(((v[2]&3)<<6)|v[3])}const done={};items.forEach((i,n)=>{if(bytes[n>>3]&(1<<(n&7)))done[i.id]=1});return done}
+function shareLink(){return location.href.split("#")[0]+"#s="+encode()}
+async function copy(text){try{await navigator.clipboard.writeText(text);return true}catch(e){const t=el("textarea",null,text);document.body.append(t);t.select();const ok=document.execCommand("copy");t.remove();return ok}}
+function toast(msg){const t=$("#toast");t.textContent=msg;t.classList.add("show");clearTimeout(t._h);t._h=setTimeout(()=>t.classList.remove("show"),1800)}
+function openSync(){
+  const dlg=$("#dlg");dlg.innerHTML="";
+  const code=encode();const ta=el("textarea",{readonly:""},code);const inp=el("textarea",{placeholder:"Paste a code (OOTS2-...) or a share link here"});
+  dlg.append(el("h3",null,"Sync / Backup"),
+    el("p",null,"Your progress is saved in this browser only. To move it to another device, copy this code (or the share link) and import it there. The code updates automatically as you check things off, so re-copy it whenever you switch devices."),
+    ta,
+    el("div",{class:"dlgrow"},
+      el("button",{class:"btn primary",onclick:async()=>{await copy(code)?toast("Code copied"):toast("Copy failed; select the text manually")}},"Copy code"),
+      el("button",{class:"btn",onclick:async()=>{await copy(shareLink())?toast("Share link copied"):toast("Copy failed")}},"Copy share link"),
+      navigator.share?el("button",{class:"btn",onclick:()=>navigator.share({title:"OoT 100% progress",url:shareLink()}).catch(()=>{})},"Share..."):null,
+      el("button",{class:"btn",onclick:()=>{const blob=new Blob([JSON.stringify({code,done:state.done,updated:state.updated},null,1)],{type:"application/json"});const a=el("a",{href:URL.createObjectURL(blob),download:"oot100-progress.json"});a.click()}},"Download backup")),
+    el("p",{style:"margin-top:14px"},el("b",null,"Import: "),"paste a code or share link, then choose how to apply it."),
+    inp,
+    el("div",{class:"dlgrow"},
+      el("button",{class:"btn primary",onclick:()=>applyImport(inp.value,"merge")},"Merge (add checks)"),
+      el("button",{class:"btn",onclick:()=>applyImport(inp.value,"replace")},"Replace all"),
+      el("button",{class:"btn",style:"margin-left:auto",onclick:()=>dlg.close()},"Close")));
+  dlg.showModal();
+}
+function applyImport(text,mode){
+  try{const m=text.match(/OOTS2-[A-Za-z0-9_-]+/);if(!m)throw new Error("No code found");const done=decode(m[0]);const n=Object.keys(done).length;
+    if(mode==="replace"){if(!confirm(`Replace your current progress with this code (${n} items checked)?`))return;state.done=done}else{Object.assign(state.done,done)}
+    save();render();$("#dlg").close();toast(mode==="replace"?`Imported ${n} items`:`Merged ${n} items`)}
+  catch(e){alert("Import failed: "+e.message)}
+}
+$("#btn-sync").addEventListener("click",openSync);
+// import from URL hash
+(function(){const m=location.hash.match(/[#&]s=(OOTS2-[A-Za-z0-9_-]+)/);if(!m)return;try{const done=decode(m[1]);const n=Object.keys(done).length,cur=Object.keys(state.done).length;
+  const msg=cur?`This link carries progress with ${n} items checked. You currently have ${cur}.\n\nOK = replace your progress with the link's.\nCancel = merge (keep both).`:`This link carries progress with ${n} items checked. Import it?`;
+  let applied=true;if(confirm(msg)){state.done=done}else if(cur){Object.assign(state.done,done)}else applied=false;if(applied){save();toast("Progress imported")}}catch(e){}
+  history.replaceState(null,"",location.pathname+location.search)})();
+
+// sticky offset for group headers
+function stick(){document.documentElement.style.setProperty("--stick",($("header.top").offsetHeight+6)+"px")}
+window.addEventListener("resize",stick);
+render();stick();
+})();
+
+</script>
+</body>
+</html>
